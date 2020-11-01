@@ -1,0 +1,26 @@
+{
+	"name": "React-GraphQL",
+	"version": "1.0.0",
+	"main": "index.js",
+	"author": "Gilbert",
+	"license": "MIT",
+	"scripts": {
+		"dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
+		"start": "node server.js",
+		"server": "nodemon server.js",
+		"client": "npm run start --prefix client"
+	},
+	"dependencies": {
+		"apollo-server": "^2.19.0",
+		"bcryptjs": "^2.4.3",
+		"colors": "^1.4.0",
+		"concurrently": "^5.3.0",
+		"dotenv": "^8.2.0",
+		"graphql": "^15.4.0",
+		"jsonwebtoken": "^8.5.1",
+		"mongoose": "^5.10.11"
+	},
+	"devDependencies": {
+		"nodemon": "^2.0.6"
+	}
+}
