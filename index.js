@@ -1,8 +1,9 @@
 require('dotenv').config();
 const { ApolloServer, PubSub } = require('apollo-server');
 const mongoose = require('mongoose');
+const colors = require('colors');
 const typeDefs = require('./graphql/typeDefs');
-const resolves = require('./graphql/resolvers');
+const resolvers = require('./graphql/resolvers');
 const PORT = process.env.port || 5000;
 
 mongoose
@@ -17,8 +18,12 @@ mongoose
 
 const server = new ApolloServer({
   typeDefs,
-  resolves,
-  content: () => ({})
+  resolvers,
+  context: () => {
+    return {};
+  }
 });
 
-server.listen({ port: PORT });
+server
+  .listen(PORT)
+  .then(({ url }) => console.log(colors.green(`Running on port ${url}`)));

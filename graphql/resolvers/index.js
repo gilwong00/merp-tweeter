@@ -1,4 +1,6 @@
-modules.exports = {
-  Query: {},
+module.exports = {
+  Query: {
+    get: () => {}
+  },
   Mutation: {}
 };
