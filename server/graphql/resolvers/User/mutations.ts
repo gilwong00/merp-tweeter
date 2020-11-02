@@ -1,8 +1,14 @@
-const User = require('../../../models/user');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+import { User } from 'models';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
-const hashPassword = password => {
+interface IUserArgs {
+  username: string;
+  email: string;
+  password: string;
+}
+
+const hashPassword = (password: string): string => {
   if (password && password.length) {
     const salt = bcrypt.genSaltSync(10);
     return bcrypt.hashSync(password, salt);
@@ -11,9 +17,10 @@ const hashPassword = password => {
   }
 };
 
-const findUserByName = async username => await User.findOne({ username });
+const findUserByName = async (username: string) =>
+  await User.findOne({ username });
 
-const register = async (_, args) => {
+export const register = async (_: any, args: IUserArgs) => {
   try {
     const { username, email, password } = args;
     const doesUserExist = await findUserByName(username);
@@ -34,7 +41,7 @@ const register = async (_, args) => {
   }
 };
 
-const authUser = async (_, args) => {
+export const authUser = async (_: any, args: IUserArgs) => {
   try {
     const { username, password } = args;
     const user = await findUserByName(username);
@@ -46,20 +53,18 @@ const authUser = async (_, args) => {
     const doesPasswordMatch = bcrypt.compareSync(password, user.password);
 
     if (!doesPasswordMatch) {
-      return res.status(400).send('password is not correct');
     }
 
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-      expiresIn: 360000
-    });
+    const token = jwt.sign(
+      { userId: user._id },
+      process.env.JWT_SECRET as string,
+      {
+        expiresIn: 360000
+      }
+    );
 
     return token;
   } catch (err) {
     throw err;
   }
-};
-
-module.exports = {
-  register,
-  authUser
 };
