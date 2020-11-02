@@ -11,12 +11,22 @@ const typeDefs = gql`
     dateCreated: Date
   }
 
+  type Tweet {
+    _id: ID!
+    message: String!
+    dateCreated: Date!
+    comments: [String]
+    likes: [String]
+    user: User!
+  }
+
   type Query {
     get: String
+    getAllTweets(offset: Int): [Tweet]
   }
 
   type Mutation {
-    register(input: RegisterInput): User!
+    registerUser(input: RegisterInput): User!
     authUser(input: AuthInput): String!
   }
 

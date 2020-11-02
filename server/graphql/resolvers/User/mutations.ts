@@ -24,7 +24,7 @@ const hashPassword = (password: string): string => {
 const findUserByName = async (username: string) =>
   await User.findOne({ username });
 
-export const register = async (_: any, args: IUserArgs) => {
+export const registerUser = async (_: any, args: IUserArgs) => {
   try {
     const { username, email, password } = args.input;
     const doesUserExist = await findUserByName(username);
