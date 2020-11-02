@@ -1,11 +1,15 @@
-import { User } from 'models';
+import { User } from '../../../models';
+import { Context } from '../context';
+import { AuthenticationError } from 'apollo-server-express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 interface IUserArgs {
-  username: string;
-  email: string;
-  password: string;
+  input: {
+    username: string;
+    email: string;
+    password: string;
+  };
 }
 
 const hashPassword = (password: string): string => {
@@ -22,12 +26,10 @@ const findUserByName = async (username: string) =>
 
 export const register = async (_: any, args: IUserArgs) => {
   try {
-    const { username, email, password } = args;
+    const { username, email, password } = args.input;
     const doesUserExist = await findUserByName(username);
 
-    if (doesUserExist) {
-      throw new Error(`Email is already in use`);
-    }
+    if (doesUserExist) throw new Error(`Email is already in use`);
 
     const newUser = await new User({
       username,
@@ -41,19 +43,17 @@ export const register = async (_: any, args: IUserArgs) => {
   }
 };
 
-export const authUser = async (_: any, args: IUserArgs) => {
+export const authUser = async (_: any, args: IUserArgs, ctx: Context) => {
   try {
-    const { username, password } = args;
+    const { username, password } = args.input;
     const user = await findUserByName(username);
 
-    if (!user) {
-      throw new Error(`Cannot find user with username ${username}`);
-    }
+    if (!user) throw new Error(`Cannot find user with username ${username}`);
 
     const doesPasswordMatch = bcrypt.compareSync(password, user.password);
 
-    if (!doesPasswordMatch) {
-    }
+    if (!doesPasswordMatch)
+      throw new AuthenticationError('Passwords do not match');
 
     const token = jwt.sign(
       { userId: user._id },
@@ -63,7 +63,17 @@ export const authUser = async (_: any, args: IUserArgs) => {
       }
     );
 
-    return token;
+    ctx.res.cookie('token', token, {
+      expires: new Date(Date.now() + 3600000),
+      path: '/'
+    });
+
+    return {
+      id: user._id,
+      username: user.username,
+      email: user.email,
+      token
+    };
   } catch (err) {
     throw err;
   }
