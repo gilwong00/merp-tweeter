@@ -4,11 +4,18 @@ const typeDefs = gql`
   scalar Date
 
   type User {
-    _id: ID
-    username: String
-    email: String
-    password: String
-    dateCreated: Date
+    _id: ID!
+    username: String!
+    email: String!
+    password: String!
+    dateCreated: Date!
+  }
+
+  type AuthedUser {
+    _id: ID!
+    username: String!
+    email: String!
+    token: String!
   }
 
   type Tweet {
@@ -27,7 +34,7 @@ const typeDefs = gql`
 
   type Mutation {
     registerUser(input: RegisterInput): User!
-    authUser(input: AuthInput): String!
+    authUser(input: AuthInput): AuthedUser!
   }
 
   # Inputs

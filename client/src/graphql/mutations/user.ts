@@ -11,3 +11,12 @@ export const REGISTER_USER = gql`
     }
   }
 `;
+
+export const AUTH_USER = gql`
+  mutation($username: String!, $password: String!) {
+    authUser(input: { username: $username, password: $password }) {
+      ...UserFields
+      token
+    }
+  }
+`;
