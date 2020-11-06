@@ -1,6 +1,9 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { AUTH_USER } from 'graphql/mutations/user';
+import { WHO_AM_I } from 'graphql/queries/user';
+import { useCookie } from 'hooks';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { Button, Form, Segment, Header } from 'semantic-ui-react';
@@ -25,8 +28,22 @@ const FormContainer = styled(Segment)`
 `;
 
 const Login = () => {
+  const history = useHistory();
+  const { setValue } = useCookie();
   const [authUser, { loading, error }] = useMutation(AUTH_USER, {
-    // update(cache, { data: { registerUser } }) {}
+    update(cache, { data }) {
+      // check for errors
+      cache.writeQuery({
+        query: WHO_AM_I,
+        data: {
+          __typename: 'Query',
+          user: data?.authUser
+        }
+      });
+      setValue('user', data?.authUser, { maxAge: 4 * 60 * 60 * 1000 });
+      cache.evict({ fieldName: 'tweets: {}' });
+      history.push('/');
+    }
   });
 
   const { register, handleSubmit, errors, formState, reset } = useForm<

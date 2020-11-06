@@ -9,13 +9,7 @@ const typeDefs = gql`
     email: String!
     password: String!
     dateCreated: Date!
-  }
-
-  type AuthedUser {
-    _id: ID!
-    username: String!
-    email: String!
-    token: String!
+    token: String
   }
 
   type Tweet {
@@ -34,7 +28,7 @@ const typeDefs = gql`
 
   type Mutation {
     registerUser(input: RegisterInput): User!
-    authUser(input: AuthInput): AuthedUser!
+    authUser(input: AuthInput): User!
   }
 
   # Inputs

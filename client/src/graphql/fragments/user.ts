@@ -1,9 +1,10 @@
 import gql from 'graphql-tag';
 
-export const UserFields = gql`
+export const USER_FIELDS = gql`
   fragment UserFields on User {
     _id
     username
     email
+    token
   }
 `;
