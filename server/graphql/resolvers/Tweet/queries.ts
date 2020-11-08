@@ -1,5 +1,5 @@
 import { AuthenticationError } from 'apollo-server-express';
-import { Context } from 'context';
+import { Context } from '../../../types/context';
 import { Tweet } from '../../../models';
 
 export const getAllTweets = async (

@@ -1,26 +1,14 @@
-import { Request } from 'express';
-import { User } from '../models';
-import { IUser } from '../models/user';
-import jwt from 'jsonwebtoken';
+import { NextFunction, Request } from 'express';
+import { AuthenticationError } from 'apollo-server-express';
 
-type Token = { userId: string };
-
-const getUser = async (req: Request): Promise<IUser | null> => {
+const authenticated = (req: Request, _: Response, next: NextFunction) => {
   const { token } = req.cookies;
 
   if (token) {
-    const { userId } = jwt.verify(
-      token,
-      process.env.JWT_SECRET as string
-    ) as Token;
-
-    if (!userId) return null;
-
-    const user = await User.findOne({ _id: userId });
-    return user;
+    return next();
   } else {
-    return null;
+    throw new AuthenticationError('You must be logged in');
   }
 };
 
-export default getUser;
+export default authenticated;

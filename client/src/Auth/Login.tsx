@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { AppContext } from 'Context';
 import { useHistory } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { AUTH_USER } from 'graphql/mutations/user';
 import { WHO_AM_I } from 'graphql/queries/user';
-import { useCookie } from 'hooks';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { Button, Form, Segment, Header } from 'semantic-ui-react';
@@ -28,8 +28,8 @@ const FormContainer = styled(Segment)`
 `;
 
 const Login = () => {
+  const { pushNotification } = useContext(AppContext);
   const history = useHistory();
-  const { setValue } = useCookie();
   const [authUser, { loading, error }] = useMutation(AUTH_USER, {
     update(cache, { data }) {
       // check for errors
@@ -40,8 +40,8 @@ const Login = () => {
           user: data?.authUser
         }
       });
-      setValue('user', data?.authUser, { maxAge: 4 * 60 * 60 * 1000 });
       cache.evict({ fieldName: 'tweets: {}' });
+      pushNotification('success', `Welcome ${data?.authUser.username}`);
       history.push('/');
     }
   });
@@ -58,7 +58,6 @@ const Login = () => {
     const { username, password } = data;
 
     if (username && password) {
-      // call mutation
       await authUser({ variables: { username, password } });
       reset();
     }

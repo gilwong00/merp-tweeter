@@ -29,6 +29,7 @@ const typeDefs = gql`
   type Mutation {
     registerUser(input: RegisterInput): User!
     authUser(input: AuthInput): User!
+    logout: Boolean!
   }
 
   # Inputs

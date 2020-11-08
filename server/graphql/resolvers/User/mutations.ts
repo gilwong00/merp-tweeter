@@ -1,5 +1,5 @@
 import { User } from '../../../models';
-import { Context } from '../../../context';
+import { Context } from '../../../types/context';
 import { AuthenticationError } from 'apollo-server-express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
@@ -77,4 +77,11 @@ export const authUser = async (_: any, args: IUserArgs, ctx: Context) => {
   } catch (err) {
     throw err;
   }
+};
+
+export const logout = async (_: any, {}: IUserArgs, ctx: Context) => {
+  const { req } = ctx;
+  req.session = null;
+  req.cookies = {};
+  return true;
 };

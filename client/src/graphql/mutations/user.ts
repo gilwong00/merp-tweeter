@@ -22,3 +22,9 @@ export const AUTH_USER = gql`
   }
   ${USER_FIELDS}
 `;
+
+export const LOGOUT = gql`
+  mutation {
+    logout
+  }
+`;

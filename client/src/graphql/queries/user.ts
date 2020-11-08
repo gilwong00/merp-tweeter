@@ -11,9 +11,10 @@ export const WHO_AM_I = gql`
 `;
 
 export const GET_LOGGED_IN_USER = gql`
-  query getLoggedInUser {
-    username
-    email
-    dateCreated
+  query {
+    getLoggedInUser {
+      ...UserFields
+    }
   }
+  ${USER_FIELDS}
 `;

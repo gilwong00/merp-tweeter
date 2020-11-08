@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import AppProvider from 'Context';
 import { App } from 'App';
 import { ApolloProvider } from '@apollo/client';
 import { client } from 'Apollo';
@@ -10,7 +11,9 @@ import 'semantic-ui-css/semantic.min.css';
 ReactDOM.render(
   <React.StrictMode>
     <ApolloProvider client={client}>
-      <App />
+      <AppProvider>
+        <App />
+      </AppProvider>
     </ApolloProvider>
   </React.StrictMode>,
   document.getElementById('root')
