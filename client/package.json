@@ -14,7 +14,6 @@
 		"@types/react-dom": "^16.9.8",
 		"@types/react-router-dom": "^5.1.6",
 		"graphql": "^15.4.0",
-		"graphql-tag": "^2.11.0",
 		"joi": "^17.3.0",
 		"react": "^17.0.1",
 		"react-dom": "^17.0.1",

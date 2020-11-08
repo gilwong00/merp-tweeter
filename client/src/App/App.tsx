@@ -4,7 +4,6 @@ import { Container } from 'semantic-ui-react';
 import { Home } from 'Home';
 import { Register, Login } from 'Auth';
 import { ProtectedRoute } from 'ProtectedRoute';
-// import './App.css';
 
 const App = () => {
   return (

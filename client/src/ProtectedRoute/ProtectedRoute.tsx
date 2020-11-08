@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Redirect, RouteComponentProps } from 'react-router-dom';
-import { client } from 'utils';
 import { WHO_AM_I } from 'graphql/queries/user';
+import { useApolloClient } from '@apollo/client';
 
 export interface Props {
   component: React.FC<RouteComponentProps>;
@@ -14,6 +14,7 @@ const ProtectedRoute: React.FC<Props> = ({
   path,
   exact = false
 }: Props) => {
+  const client = useApolloClient();
   const user = client.readQuery({
     query: WHO_AM_I
   });

@@ -1,5 +1,5 @@
 import { User } from '../../../models';
-import { Context } from '../context';
+import { Context } from '../../../context';
 import { AuthenticationError } from 'apollo-server-express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';

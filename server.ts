@@ -7,11 +7,20 @@ import cookieSession from 'cookie-session';
 import cors from 'cors';
 import colors from 'colors';
 import schema from './server/graphql/schema';
+import isAuth from './server/middleware/isAuth';
 const PORT = process.env.port || 5000;
 
 const startServer = async () => {
   const app = express();
-  app.use(cors());
+  app.use(
+    cors({
+      credentials: true,
+      origin:
+        process.env.NODE_ENV === 'Production'
+          ? 'prod url'
+          : 'http://localhost:3000'
+    })
+  );
   app.use(cookieParser());
   app.use(
     cookieSession({
@@ -35,10 +44,14 @@ const startServer = async () => {
   const server = new ApolloServer({
     schema,
     playground: true,
-    context: ({ req, res }) => ({
-      req,
-      res
-    })
+    context: async ({ req, res }) => {
+      const user = await isAuth(req);
+      return {
+        req,
+        res,
+        user
+      };
+    }
   });
 
   server.applyMiddleware({

@@ -22,8 +22,8 @@ const typeDefs = gql`
   }
 
   type Query {
-    get: String
     getAllTweets(offset: Int): [Tweet]
+    getLoggedInUser: User
   }
 
   type Mutation {

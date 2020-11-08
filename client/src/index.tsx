@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { App } from 'App';
 import { ApolloProvider } from '@apollo/client';
-import { client } from 'utils';
+import { client } from 'Apollo';
 import reportWebVitals from './reportWebVitals';
 import './index.css';
 import 'semantic-ui-css/semantic.min.css';
