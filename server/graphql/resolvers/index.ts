@@ -1,6 +1,7 @@
 import { IResolvers } from 'graphql-tools';
 import * as userMutations from './User/mutations';
 import * as userQueries from './User/queries';
+import * as tweetMutations from './Tweet/mutations';
 import * as tweetQueries from './Tweet/queries';
 
 const resolvers: IResolvers = {
@@ -9,7 +10,8 @@ const resolvers: IResolvers = {
     ...userQueries
   },
   Mutation: {
-    ...userMutations
+    ...userMutations,
+    ...tweetMutations
   }
 };
 

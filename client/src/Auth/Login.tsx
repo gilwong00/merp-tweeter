@@ -32,17 +32,20 @@ const Login = () => {
   const history = useHistory();
   const [authUser, { loading, error }] = useMutation(AUTH_USER, {
     update(cache, { data }) {
-      // check for errors
-      cache.writeQuery({
-        query: WHO_AM_I,
-        data: {
-          __typename: 'Query',
-          user: data?.authUser
-        }
-      });
-      cache.evict({ fieldName: 'tweets: {}' });
-      pushNotification('success', `Welcome ${data?.authUser.username}`);
-      history.push('/');
+      if (error) {
+        pushNotification('error', `Could not log in ${JSON.stringify(error)}`);
+      } else {
+        cache.writeQuery({
+          query: WHO_AM_I,
+          data: {
+            __typename: 'Query',
+            user: data?.authUser
+          }
+        });
+        cache.evict({ fieldName: 'tweets: {}' });
+        pushNotification('success', `Welcome ${data?.authUser.username}`);
+        history.push('/');
+      }
     }
   });
 

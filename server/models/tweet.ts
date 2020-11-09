@@ -37,6 +37,8 @@ const tweetSchema = new Schema({
   }
 });
 
+tweetSchema.index({ message: 'string' });
+
 const Tweet = model<ITweet>('Tweet', tweetSchema);
 
 export default Tweet;

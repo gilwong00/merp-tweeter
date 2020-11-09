@@ -1,11 +1,11 @@
-import { NextFunction, Request } from 'express';
 import { AuthenticationError } from 'apollo-server-express';
+import { Context } from 'types/context';
 
-const authenticated = (req: Request, _: Response, next: NextFunction) => {
-  const { token } = req.cookies;
+const authenticated = (next: any) => (_: any, args: any, ctx: Context) => {
+  const { token } = ctx.req.cookies;
 
   if (token) {
-    return next();
+    return next(_, args, ctx);
   } else {
     throw new AuthenticationError('You must be logged in');
   }

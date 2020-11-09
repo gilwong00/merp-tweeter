@@ -30,6 +30,7 @@ const typeDefs = gql`
     registerUser(input: RegisterInput): User!
     authUser(input: AuthInput): User!
     logout: Boolean!
+    createTweet(input: TweetInput): Tweet!
   }
 
   # Inputs
@@ -42,6 +43,12 @@ const typeDefs = gql`
   input AuthInput {
     username: String!
     password: String!
+  }
+
+  input TweetInput {
+    message: String!
+    username: String!
+    user: ID!
   }
 `;
 

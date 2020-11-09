@@ -1,10 +1,22 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Grid, Transition, Loader, Dimmer, Header } from 'semantic-ui-react';
 import { useQuery } from '@apollo/client';
 import { GET_ALL_TWEETS } from 'graphql/queries/tweet';
+import { ITweet, Tweet } from 'Tweet';
+import { AppContext } from 'Context';
+import styled from 'styled-components';
+
+const GridContainer = styled(Grid)`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`;
 
 const Home = () => {
-  const { loading, error, data } = useQuery(GET_ALL_TWEETS);
+  const { user } = useContext(AppContext);
+  const { loading, error, data } = useQuery(GET_ALL_TWEETS, {
+    variables: { offset: 0 }
+  });
 
   if (loading)
     return (
@@ -14,11 +26,25 @@ const Home = () => {
     );
 
   return (
-    <Grid columns={3}>
+    <GridContainer columns={3}>
       <Grid.Row className='page-title'>
+        {/* replace this with search component */}
         <Header as='h1'>Tweets</Header>
       </Grid.Row>
-    </Grid>
+      <Grid.Row>
+        {loading ? (
+          <Loader />
+        ) : (
+          <Transition.Group>
+            {data.getAllTweets.map((tweet: ITweet) => (
+              <Grid.Column key={tweet._id} style={{ marginBottom: 20 }}>
+                <Tweet tweet={tweet} user={user} />
+              </Grid.Column>
+            ))}
+          </Transition.Group>
+        )}
+      </Grid.Row>
+    </GridContainer>
   );
 };
 

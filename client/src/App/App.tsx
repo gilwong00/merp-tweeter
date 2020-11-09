@@ -1,28 +1,20 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
-import { GET_LOGGED_IN_USER, WHO_AM_I } from 'graphql/queries/user';
-import { Container, Dimmer, Loader } from 'semantic-ui-react';
+import { Container, Dimmer, Loader, Segment } from 'semantic-ui-react';
 import { Home } from 'Home';
 import { Register, Login } from 'Auth';
 import { ProtectedRoute } from 'ProtectedRoute';
 import { Notification } from 'Notification';
 import { Navbar } from 'Navbar';
-import { cache } from 'Apollo';
+import { AppContext } from 'Context';
+import styled from 'styled-components';
+
+const StyledSegment = styled(Segment)`
+  height: 800px;
+`;
 
 const App = () => {
-  const { data, loading } = useQuery(GET_LOGGED_IN_USER);
-
-  // initialize user state
-  if (data?.getLoggedInUser) {
-    cache.writeQuery({
-      query: WHO_AM_I,
-      data: {
-        __typename: 'Query',
-        user: data?.getLoggedInUser
-      }
-    });
-  }
+  const { loading } = useContext(AppContext);
 
   if (loading) {
     return (
@@ -35,13 +27,15 @@ const App = () => {
   return (
     <Router>
       <Container>
-        <Navbar />
-        <Switch>
-          <Route path='/login' component={Login} />
-          <Route path='/register' component={Register} />
-          <ProtectedRoute exact path='/' component={Home} />
-        </Switch>
-        <Notification />
+        <StyledSegment>
+          <Navbar />
+          <Switch>
+            <Route path='/login' component={Login} />
+            <Route path='/register' component={Register} />
+            <ProtectedRoute exact path='/' component={Home} />
+          </Switch>
+          <Notification />
+        </StyledSegment>
       </Container>
     </Router>
   );

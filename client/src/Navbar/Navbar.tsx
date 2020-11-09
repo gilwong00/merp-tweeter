@@ -1,42 +1,58 @@
-import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useState, useContext } from 'react';
+import { useLocation, useHistory } from 'react-router-dom';
 import { Menu } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import { WHO_AM_I } from 'graphql/queries/user';
 import { LOGOUT } from 'graphql/mutations/user';
-import { useApolloClient, useLazyQuery } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { useCookie } from 'hooks';
+import { AppContext } from 'Context';
+import { WHO_AM_I } from 'graphql/queries/user';
 
 const Navbar = () => {
+  const { user, pushNotification } = useContext(AppContext);
   const location = useLocation();
-  const client = useApolloClient();
+  const history = useHistory();
   const path = location.pathname === '/' ? 'home' : location.pathname.substr(1);
   const [activeItem, setActiveItem] = useState<string>(path);
-  const [logout] = useLazyQuery(LOGOUT);
   const { removeValue } = useCookie();
-
-  const user = client.readQuery({
-    query: WHO_AM_I
+  const [logout] = useMutation(LOGOUT, {
+    update(cache) {
+      cache.writeQuery({
+        query: WHO_AM_I,
+        data: {
+          __typename: 'Query',
+          user: null
+        }
+      });
+      cache.evict({ fieldName: 'tweets: {}' });
+      removeValue('token');
+      pushNotification('success', `Logged out`);
+      history.push('/');
+    }
   });
 
-  const handleItemClick = (item: string) => setActiveItem(item);
-
   return (
-    <Menu pointing secondary size='massive' color='teal' inverted={true}>
+    <Menu pointing secondary size='massive' color='violet' inverted>
       {user ? (
         <>
-          <Menu.Item name={user.username} active as={Link} to='/'>
+          <Menu.Item
+            name={user.username}
+            as={Link}
+            to='/'
+            onClick={() => setActiveItem('/')}
+          >
             Merp Tweeter
           </Menu.Item>
 
           <Menu.Menu position='right'>
             <Menu.Item
-              name='logout'
-              onClick={() => {
-                removeValue('token');
-                logout();
-              }}
+              name='newTweet'
+              active={activeItem === 'newTweet'}
+              onClick={() => setActiveItem('newTweet')}
+              as={Link}
+              to='/tweet/new'
             />
+            <Menu.Item name='logout' onClick={() => logout()} />
           </Menu.Menu>
         </>
       ) : (
@@ -44,7 +60,7 @@ const Navbar = () => {
           <Menu.Item
             name='home'
             active={activeItem === 'home'}
-            onClick={() => handleItemClick('home')}
+            onClick={() => setActiveItem('home')}
             as={Link}
             to='/'
           />
@@ -53,14 +69,14 @@ const Navbar = () => {
             <Menu.Item
               name='login'
               active={activeItem === 'login'}
-              onClick={() => handleItemClick('login')}
+              onClick={() => setActiveItem('login')}
               as={Link}
               to='/login'
             />
             <Menu.Item
               name='register'
               active={activeItem === 'register'}
-              onClick={() => handleItemClick('register')}
+              onClick={() => setActiveItem('register')}
               as={Link}
               to='/register'
             />

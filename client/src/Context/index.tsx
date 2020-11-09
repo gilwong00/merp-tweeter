@@ -1,4 +1,7 @@
 import React, { createContext, useState } from 'react';
+import { useQuery } from '@apollo/client';
+import { GET_LOGGED_IN_USER, WHO_AM_I } from 'graphql/queries/user';
+import { cache } from 'Apollo';
 import { v4 } from 'uuid';
 
 type NotificationType = 'success' | 'error';
@@ -9,7 +12,16 @@ export interface INotification {
   type: NotificationType;
 }
 
+export interface IUser {
+  _id: string;
+  username: string;
+  email: string;
+  token?: string;
+}
+
 interface IAppContext {
+  user: IUser | null;
+  loading: boolean;
   notifications: Array<INotification>;
   pushNotification: (type: NotificationType, message: string) => void;
   removeNotification: (id: string) => void;
@@ -17,14 +29,28 @@ interface IAppContext {
 }
 
 export const AppContext = createContext<IAppContext>({
+  user: null,
+  loading: false,
   notifications: [],
   pushNotification: () => undefined,
   removeNotification: () => undefined,
   resetNotifications: () => undefined
 });
 
-export default ({ children }: { children: React.ReactNode }) => {
+const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [notifications, setNotifications] = useState<Array<INotification>>([]);
+  const { data, loading } = useQuery(GET_LOGGED_IN_USER);
+
+  // initialize user state
+  if (data?.getLoggedInUser) {
+    cache.writeQuery({
+      query: WHO_AM_I,
+      data: {
+        __typename: 'Query',
+        user: data?.getLoggedInUser
+      }
+    });
+  }
 
   const pushNotification = (type: NotificationType, message: string) => {
     setNotifications([...notifications, { id: v4(), type, message }]);
@@ -42,6 +68,8 @@ export default ({ children }: { children: React.ReactNode }) => {
   const resetNotifications = () => setNotifications([]);
 
   const context: IAppContext = {
+    user: data?.getLoggedInUser,
+    loading,
     notifications,
     pushNotification,
     removeNotification,
@@ -50,3 +78,5 @@ export default ({ children }: { children: React.ReactNode }) => {
 
   return <AppContext.Provider value={context}>{children}</AppContext.Provider>;
 };
+
+export default AppProvider;
