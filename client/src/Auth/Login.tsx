@@ -101,7 +101,7 @@ const Login = () => {
           loading={isSubmitting || loading}
           color='green'
         >
-          Register
+          Login
         </Button>
       </Form>
     </FormContainer>

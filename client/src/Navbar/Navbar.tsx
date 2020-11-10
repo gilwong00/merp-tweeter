@@ -27,7 +27,7 @@ const Navbar = () => {
       cache.evict({ fieldName: 'tweets: {}' });
       removeValue('token');
       pushNotification('success', `Logged out`);
-      history.push('/');
+      history.push('/login');
     }
   });
 
