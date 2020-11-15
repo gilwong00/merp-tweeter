@@ -1,11 +1,13 @@
 import React, { useContext } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import { Container, Dimmer, Loader, Segment } from 'semantic-ui-react';
+import { Container, Segment } from 'semantic-ui-react';
 import { Home } from 'Home';
 import { Register, Login } from 'Auth';
 import { ProtectedRoute } from 'ProtectedRoute';
 import { Notification } from 'Notification';
 import { Navbar } from 'Navbar';
+import { Loading } from 'Loading';
+import { NewTweet } from 'Tweet';
 import { AppContext } from 'Context';
 import styled from 'styled-components';
 
@@ -16,13 +18,7 @@ const StyledSegment = styled(Segment)`
 const App = () => {
   const { loading } = useContext(AppContext);
 
-  if (loading) {
-    return (
-      <Dimmer active>
-        <Loader />
-      </Dimmer>
-    );
-  }
+  if (loading) return <Loading />;
 
   return (
     <Router>
@@ -32,6 +28,7 @@ const App = () => {
           <Switch>
             <Route path='/login' component={Login} />
             <Route path='/register' component={Register} />
+            <ProtectedRoute exact path='/tweet/new' component={NewTweet} />
             <ProtectedRoute exact path='/' component={Home} />
           </Switch>
           <Notification />

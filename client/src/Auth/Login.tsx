@@ -49,13 +49,11 @@ const Login = () => {
     }
   });
 
-  const { register, handleSubmit, errors, formState, reset } = useForm<
-    IFormInputs
-  >({
+  const { register, handleSubmit, errors, reset } = useForm<IFormInputs>({
     resolver: joiResolver(schema)
   });
 
-  const { isDirty, isSubmitting } = formState;
+  // const { isDirty, isSubmitting } = formState;
 
   const onSubmit = async (data: IFormInputs) => {
     const { username, password } = data;
@@ -95,12 +93,7 @@ const Login = () => {
           />
         </Form.Field>
 
-        <Button
-          fluid
-          type='submit'
-          loading={isSubmitting || loading}
-          color='green'
-        >
+        <Button fluid type='submit' loading={loading} color='green'>
           Login
         </Button>
       </Form>

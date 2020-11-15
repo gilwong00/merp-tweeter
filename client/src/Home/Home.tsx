@@ -1,8 +1,9 @@
 import React, { useContext } from 'react';
-import { Grid, Transition, Loader, Dimmer, Header } from 'semantic-ui-react';
+import { Grid, Transition, Header } from 'semantic-ui-react';
 import { useQuery } from '@apollo/client';
 import { GET_ALL_TWEETS } from 'graphql/queries/tweet';
 import { ITweet, Tweet } from 'Tweet';
+import { Loading } from 'Loading';
 import { AppContext } from 'Context';
 import styled from 'styled-components';
 
@@ -13,17 +14,12 @@ const GridContainer = styled(Grid)`
 `;
 
 const Home = () => {
-  const { user } = useContext(AppContext);
+  const { user, pushNotification } = useContext(AppContext);
   const { loading, error, data } = useQuery(GET_ALL_TWEETS, {
     variables: { offset: 0 }
   });
 
-  if (loading)
-    return (
-      <Dimmer active>
-        <Loader />
-      </Dimmer>
-    );
+  if (error) pushNotification('error', error.message);
 
   return (
     <GridContainer columns={3}>
@@ -33,7 +29,7 @@ const Home = () => {
       </Grid.Row>
       <Grid.Row>
         {loading ? (
-          <Loader />
+          <Loading />
         ) : (
           <Transition.Group>
             {data.getAllTweets.map((tweet: ITweet) => (
