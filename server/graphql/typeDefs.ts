@@ -22,7 +22,7 @@ const typeDefs = gql`
   }
 
   type Query {
-    getAllTweets(offset: Int): [Tweet]
+    tweets(offset: Int): [Tweet]
     getLoggedInUser: User
   }
 

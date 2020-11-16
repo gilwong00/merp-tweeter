@@ -12,7 +12,7 @@ import { AppContext } from 'Context';
 import styled from 'styled-components';
 
 const StyledSegment = styled(Segment)`
-  height: 800px;
+  height: 1000px;
 `;
 
 const App = () => {

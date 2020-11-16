@@ -36,15 +36,15 @@ const NewTweet = () => {
         const currentTweets = cache.readQuery({
           query: GET_ALL_TWEETS,
           variables: { offset: 0 }
-        }) as { getAllTweets: Array<ITweet> };
+        }) as { tweets: Array<ITweet> };
 
-        const tweets = [data.createTweet, ...currentTweets.getAllTweets];
+        const tweets = [data.createTweet, ...currentTweets.tweets];
         cache.writeQuery({
           query: GET_ALL_TWEETS,
           variables: { offset: 0 },
           data: {
             __typename: 'Query',
-            getAllTweets: tweets
+            tweets: tweets
           }
         });
       }

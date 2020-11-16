@@ -3,7 +3,7 @@ import { Dimmer, Loader } from 'semantic-ui-react';
 
 const Loading = () => (
   <Dimmer active>
-    <Loader />
+    <Loader size='massive'>Loading</Loader>
   </Dimmer>
 );
 

@@ -1,13 +1,15 @@
 import { Tweet } from '../../../models';
 import authenticated from '../../../middleware/isAuth';
 
-export const getAllTweets = authenticated(
+const LIMIT = 5;
+
+export const tweets = authenticated(
   async (_: any, args: { offset: number }) => {
     try {
       const { offset } = args;
       return await Tweet.find({})
-        .limit(10)
-        .skip(offset ?? 0)
+        .limit(LIMIT)
+        .skip((offset ?? 0) * LIMIT)
         .populate({ path: 'user', model: 'User' });
     } catch (err) {
       throw err;
