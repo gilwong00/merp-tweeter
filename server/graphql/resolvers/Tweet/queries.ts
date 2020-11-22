@@ -10,7 +10,9 @@ export const tweets = authenticated(
       return await Tweet.find({})
         .limit(LIMIT)
         .skip((offset ?? 0) * LIMIT)
-        .populate({ path: 'user', model: 'User' });
+        .sort({ dateCreated: -1 })
+        .populate({ path: 'user', model: 'User' })
+        .populate({ path: 'likes', model: 'Like' });
     } catch (err) {
       throw err;
     }

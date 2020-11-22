@@ -7,7 +7,11 @@ export const GET_ALL_TWEETS = gql`
       message
       dateCreated
       comments
-      likes
+      likes {
+        _id
+        username
+        dateCreated
+      }
       user {
         _id
         username

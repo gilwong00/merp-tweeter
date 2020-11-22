@@ -1,8 +1,9 @@
 import React from 'react';
-import { Button, Card, Icon, Label, Image } from 'semantic-ui-react';
+import { Card, Image } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { IUser } from 'Context';
 import { ITweet } from 'Tweet';
+import LikeButton from './LikeButton';
 
 interface IProps {
   tweet: ITweet;
@@ -38,6 +39,9 @@ const Tweet: React.FC<IProps> = ({ tweet, user }) => {
           {displayDate} at {displayTime}
         </Card.Meta>
         <Card.Description>{tweet.message}</Card.Description>
+      </Card.Content>
+      <Card.Content extra>
+        <LikeButton user={user} likes={tweet.likes} />
       </Card.Content>
     </Card>
   );

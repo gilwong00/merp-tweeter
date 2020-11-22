@@ -12,12 +12,19 @@ const typeDefs = gql`
     token: String
   }
 
+  type Like {
+    _id: ID!
+    username: String!
+    dateCreated: Date!
+    tweetId: ID!
+  }
+
   type Tweet {
     _id: ID!
     message: String!
     dateCreated: Date!
     comments: [String]
-    likes: [String]
+    likes: [Like]
     user: User!
   }
 
@@ -31,6 +38,7 @@ const typeDefs = gql`
     authUser(input: AuthInput): User!
     logout: Boolean!
     createTweet(input: TweetInput): Tweet!
+    likeTweet(input: LikeInput!): Like
   }
 
   # Inputs
@@ -49,6 +57,11 @@ const typeDefs = gql`
     message: String!
     username: String!
     user: ID!
+  }
+
+  input LikeInput {
+    tweetId: ID!
+    username: String!
   }
 `;
 
