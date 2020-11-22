@@ -13,3 +13,14 @@ export const CREATE_TWEET = gql`
     }
   }
 `;
+
+export const LIKE_TWEET = gql`
+  mutation likeTweet($tweetId: String!, $username: String!) {
+    like(input: { tweetId: $tweetId, username: $username }) {
+      _id
+      username
+      dateCreated
+      tweetId
+    }
+  }
+`;

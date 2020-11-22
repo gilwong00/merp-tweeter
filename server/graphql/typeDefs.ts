@@ -39,7 +39,7 @@ const typeDefs = gql`
     authUser(input: AuthInput): User!
     logout: Boolean!
     createTweet(input: TweetInput): Tweet!
-    likeTweet(input: LikeInput!): Like
+    like(input: LikeInput!): Like
   }
 
   # Inputs

@@ -41,7 +41,7 @@ const Tweet: React.FC<IProps> = ({ tweet, user }) => {
         <Card.Description>{tweet.message}</Card.Description>
       </Card.Content>
       <Card.Content extra>
-        <LikeButton user={user} likes={tweet.likes} />
+        <LikeButton user={user} likes={tweet.likes} tweetId={tweet._id} />
       </Card.Content>
     </Card>
   );

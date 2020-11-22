@@ -12,7 +12,8 @@ import { AppContext } from 'Context';
 import styled from 'styled-components';
 
 const StyledSegment = styled(Segment)`
-  height: 1100px;
+  height: auto;
+  min-height: 1200px;
 `;
 
 const App = () => {

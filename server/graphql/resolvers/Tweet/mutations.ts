@@ -24,7 +24,7 @@ export const createTweet = authenticated(async (_: any, args: ITweetArgs) => {
   }
 });
 
-export const likeTweet = authenticated(async (_: any, args: ILikeTweetArgs) => {
+export const like = async (_: any, args: ILikeTweetArgs) => {
   try {
     // need to null check input
     const newLike = await new Like(args.input).save();
@@ -41,4 +41,4 @@ export const likeTweet = authenticated(async (_: any, args: ILikeTweetArgs) => {
   } catch (err) {
     throw err;
   }
-});
+};
