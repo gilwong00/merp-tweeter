@@ -19,3 +19,13 @@ export const GET_ALL_TWEETS = gql`
     }
   }
 `;
+
+export const SEARCH_TWEETS = gql`
+  query searchTweets($searchTerm: String!) {
+    search(searchTerm: $searchTerm) {
+      _id
+      message
+      dateCreated
+    }
+  }
+`;

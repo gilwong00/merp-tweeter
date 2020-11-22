@@ -18,3 +18,21 @@ export const tweets = authenticated(
     }
   }
 );
+
+export const search = authenticated(
+  async (_: any, args: { searchTerm: string }) => {
+    try {
+      const { searchTerm } = args;
+
+      if (!searchTerm) throw new Error('No search term provided');
+
+      const tweets = await Tweet.find({
+        message: { $regex: searchTerm, $options: 'i' }
+      });
+
+      return tweets;
+    } catch (err) {
+      throw err;
+    }
+  }
+);
