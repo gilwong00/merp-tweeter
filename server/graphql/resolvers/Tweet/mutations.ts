@@ -24,7 +24,7 @@ export const createTweet = authenticated(async (_: any, args: ITweetArgs) => {
   }
 });
 
-export const like = async (_: any, args: ILikeTweetArgs) => {
+export const like = authenticated(async (_: any, args: ILikeTweetArgs) => {
   try {
     // need to null check input
     const newLike = await new Like(args.input).save();
@@ -41,4 +41,26 @@ export const like = async (_: any, args: ILikeTweetArgs) => {
   } catch (err) {
     throw err;
   }
-};
+});
+
+export const unlike = authenticated(
+  async (_: any, args: { input: { likeId: string; tweetId: string } }) => {
+    try {
+      const { likeId, tweetId } = args.input;
+
+      const res = await Like.findByIdAndRemove({ _id: likeId });
+
+      if (!res) throw new Error('Could not unlike tweet');
+
+      await Tweet.findByIdAndUpdate(
+        { _id: tweetId },
+        {
+          $pull: { likes: likeId }
+        }
+      );
+      return res;
+    } catch (err) {
+      throw err;
+    }
+  }
+);

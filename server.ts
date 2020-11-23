@@ -35,7 +35,8 @@ const startServer = async () => {
     .connect(process.env.MONGO_URI as string, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-      useCreateIndex: true
+      useCreateIndex: true,
+      useFindAndModify: false
     })
     .catch(err =>
       console.log(colors.red(`Error connecting to mongo: ${err.message}`))

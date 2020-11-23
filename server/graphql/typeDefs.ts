@@ -40,6 +40,7 @@ const typeDefs = gql`
     logout: Boolean!
     createTweet(input: TweetInput): Tweet!
     like(input: LikeInput!): Like
+    unlike(input: UnlikeInput): Like
   }
 
   # Inputs
@@ -63,6 +64,11 @@ const typeDefs = gql`
   input LikeInput {
     tweetId: ID!
     username: String!
+  }
+
+  input UnlikeInput {
+    tweetId: ID!
+    likeId: ID!
   }
 `;
 

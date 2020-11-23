@@ -10,6 +10,7 @@ export interface IComment {
 }
 
 export interface ILike {
+  _id: string;
   username: string;
   dateCreated: Date;
   tweetId: string;

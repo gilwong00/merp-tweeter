@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { gql, useMutation } from '@apollo/client';
-import { LIKE_TWEET } from 'graphql/mutations/tweet';
-import { IUser } from 'Context';
+import { ApolloCache } from '@apollo/client/core';
+import { LIKE_TWEET, UNLIKE_TWEET } from 'graphql/mutations/tweet';
+import { AppContext, IUser } from 'Context';
 import { Button, Label, Icon } from 'semantic-ui-react';
 import { ILike } from '.';
 
@@ -11,55 +12,109 @@ interface IProps {
   likes: Array<ILike>;
   tweetId: string;
 }
-const LikeButton: React.FC<IProps> = ({ user, likes, tweetId }) => {
-  const [liked, setLiked] = useState<boolean>(false);
-  const history = useHistory();
-  const [like, { loading, error }] = useMutation(LIKE_TWEET, {
-    update(cache, { data }) {
-      const tweet = cache.readFragment<{ _id: string; likes: Array<string> }>({
-        id: 'Tweet:' + tweetId,
-        fragment: gql`
-          fragment currentLikes on Tweet {
-            likes {
-              _id
-            }
-          }
-        `
-      });
 
-      if (tweet) {
-        cache.writeFragment({
-          id: 'Tweet:' + tweetId,
-          fragment: gql`
-            fragment newLike on Tweet {
-              likes {
-                _id
-              }
-            }
-          `,
-          data: {
-            __typename: 'Tweet',
-            likes: [...tweet.likes, { __typename: 'Like', _id: data.like._id }]
-          }
-        });
+interface ILikeUnlikeResult {
+  like?: { _id: string };
+  unlike?: { _id: string };
+}
+
+type LikeAction = 'like' | 'unlike';
+
+const updateLikeCount = (
+  tweetId: string,
+  cache: ApolloCache<any>,
+  data: ILikeUnlikeResult,
+  action: LikeAction
+): void => {
+  const tweet = cache.readFragment<{
+    _id: string;
+    likes: Array<{ _id: string }>;
+  }>({
+    id: 'Tweet:' + tweetId,
+    fragment: gql`
+      fragment currentLikes on Tweet {
+        likes {
+          _id
+        }
       }
+    `
+  });
+
+  if (tweet) {
+    const likes =
+      action === 'like'
+        ? [...tweet.likes, { __typename: 'Like', _id: data.like?._id }]
+        : [...tweet.likes.filter(like => like._id !== data.unlike?._id)];
+
+    cache.writeFragment({
+      id: 'Tweet:' + tweetId,
+      fragment: gql`
+        fragment likes on Tweet {
+          likes {
+            _id
+          }
+        }
+      `,
+      data: {
+        __typename: 'Tweet',
+        likes
+      }
+    });
+  }
+};
+
+const LikeButton: React.FC<IProps> = ({ user, likes, tweetId }) => {
+  const { pushNotification } = useContext(AppContext);
+  const [liked, setLiked] = useState<ILike | null>();
+  const history = useHistory();
+  const [
+    like,
+    { loading: likeTweetLoading, error: likeTweetError }
+  ] = useMutation(LIKE_TWEET, {
+    update(cache, { data }) {
+      updateLikeCount(tweetId, cache, data, 'like');
+    }
+  });
+
+  const [
+    unlike,
+    { loading: unlikeTweetLoading, error: unlikeTweetError }
+  ] = useMutation(UNLIKE_TWEET, {
+    update(cache, { data }) {
+      updateLikeCount(tweetId, cache, data, 'unlike');
     }
   });
 
   useEffect(() => {
-    if (user && likes.find((like: ILike) => like.username === user.username))
-      setLiked(true);
+    const likedByUser = likes.find(
+      (like: ILike) => like.username === user?.username
+    );
+    if (user && likedByUser) setLiked(likedByUser);
   }, [user, likes]);
+
+  useEffect(() => {
+    if (likeTweetError) pushNotification('error', likeTweetError.message);
+    if (unlikeTweetError) pushNotification('error', unlikeTweetError.message);
+  }, [pushNotification, likeTweetError, unlikeTweetError]);
 
   const handleClick = async () => {
     if (!user) return history.push('/login');
-    // need to also handle the case where if the user clicks the same tweet unlike
-    await like({ variables: { tweetId, username: user.username } });
+
+    if (liked) {
+      await unlike({ variables: { tweetId, likeId: liked?._id } });
+      setLiked(null);
+    } else {
+      await like({ variables: { tweetId, username: user.username } });
+    }
   };
 
   return (
     <Button as='div' labelPosition='right'>
-      <Button color={liked ? 'red' : undefined} onClick={handleClick}>
+      <Button
+        color={liked ? 'red' : undefined}
+        onClick={handleClick}
+        loading={likeTweetLoading || unlikeTweetLoading}
+      >
         <Icon name='heart' />
       </Button>
       <Label basic color='red' pointing='left'>

@@ -26,3 +26,12 @@ export const LIKE_TWEET = gql`
     }
   }
 `;
+
+export const UNLIKE_TWEET = gql`
+  mutation unlikeTweet($tweetId: ID!, $likeId: ID!) {
+    unlike(input: { tweetId: $tweetId, likeId: $likeId }) {
+      _id
+      tweetId
+    }
+  }
+`;
