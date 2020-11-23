@@ -3,10 +3,9 @@ import { useLocation, useHistory } from 'react-router-dom';
 import { Menu } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { LOGOUT } from 'graphql/mutations/user';
-import { useMutation } from '@apollo/client';
+import { useMutation, useApolloClient } from '@apollo/client';
 import { useCookie } from 'hooks';
 import { AppContext } from 'Context';
-import { WHO_AM_I } from 'graphql/queries/user';
 
 const Navbar = () => {
   const { user, pushNotification } = useContext(AppContext);
@@ -15,16 +14,11 @@ const Navbar = () => {
   const path = location.pathname === '/' ? 'home' : location.pathname.substr(1);
   const [activeItem, setActiveItem] = useState<string>(path);
   const { removeValue } = useCookie();
+  const apolloClient = useApolloClient();
+
   const [logout] = useMutation(LOGOUT, {
-    update(cache) {
-      cache.writeQuery({
-        query: WHO_AM_I,
-        data: {
-          __typename: 'Query',
-          user: null
-        }
-      });
-      cache.evict({ fieldName: 'tweets: {}' });
+    update() {
+      apolloClient.resetStore();
       removeValue('token');
       pushNotification('success', `Logged out`);
       history.push('/login');

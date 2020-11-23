@@ -9,13 +9,15 @@ export const CREATE_TWEET = gql`
       message
       dateCreated
       comments
-      likes
+      likes {
+        _id
+      }
     }
   }
 `;
 
 export const LIKE_TWEET = gql`
-  mutation likeTweet($tweetId: String!, $username: String!) {
+  mutation likeTweet($tweetId: ID!, $username: String!) {
     like(input: { tweetId: $tweetId, username: $username }) {
       _id
       username
