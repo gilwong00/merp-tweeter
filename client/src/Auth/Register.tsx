@@ -3,7 +3,6 @@ import { useMutation } from '@apollo/client';
 import { REGISTER_USER } from 'graphql/mutations/user';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
-import { Button, Form, Segment, Header } from 'semantic-ui-react';
 import * as joi from 'joi';
 import styled from 'styled-components';
 
@@ -24,12 +23,12 @@ const schema = joi.object({
   confirmedPassword: joi.string().required()
 });
 
-const FormContainer = styled(Segment)`
-  width: 550px;
-  margin-top: 2rem !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-`;
+// const FormContainer = styled(Segment)`
+//   width: 550px;
+//   margin-top: 2rem !important;
+//   margin-left: auto !important;
+//   margin-right: auto !important;
+// `;
 
 const Register = () => {
   const [registerUser, { loading, error }] = useMutation(REGISTER_USER, {
@@ -38,9 +37,13 @@ const Register = () => {
     }
   });
 
-  const { register, handleSubmit, errors, formState, reset } = useForm<
-    IFormInputs
-  >({
+  const {
+    register,
+    handleSubmit,
+    errors,
+    formState,
+    reset
+  } = useForm<IFormInputs>({
     resolver: joiResolver(schema)
   });
 
@@ -58,68 +61,69 @@ const Register = () => {
 
   // TODO add error validations
   return (
-    <FormContainer>
-      <Form noValidate onSubmit={handleSubmit(onSubmit)}>
-        <Header as='h1' textAlign='center'>
-          Register
-        </Header>
-        <Form.Field>
-          <label>Username</label>
-          <input
-            placeholder='Enter a username'
-            type='text'
-            name='username'
-            ref={register({
-              required: true
-            })}
-          />
-        </Form.Field>
+    // <FormContainer>
+    //   <Form noValidate onSubmit={handleSubmit(onSubmit)}>
+    //     <Header as='h1' textAlign='center'>
+    //       Register
+    //     </Header>
+    //     <Form.Field>
+    //       <label>Username</label>
+    //       <input
+    //         placeholder='Enter a username'
+    //         type='text'
+    //         name='username'
+    //         ref={register({
+    //           required: true
+    //         })}
+    //       />
+    //     </Form.Field>
 
-        <Form.Field>
-          <label>Email</label>
-          <input
-            placeholder='Enter a email'
-            type='text'
-            name='email'
-            ref={register({
-              required: true
-            })}
-          />
-        </Form.Field>
+    //     <Form.Field>
+    //       <label>Email</label>
+    //       <input
+    //         placeholder='Enter a email'
+    //         type='text'
+    //         name='email'
+    //         ref={register({
+    //           required: true
+    //         })}
+    //       />
+    //     </Form.Field>
 
-        <Form.Field>
-          <label>Password</label>
-          <input
-            placeholder='Enter a password'
-            type='password'
-            name='password'
-            ref={register({
-              required: true
-            })}
-          />
-        </Form.Field>
+    //     <Form.Field>
+    //       <label>Password</label>
+    //       <input
+    //         placeholder='Enter a password'
+    //         type='password'
+    //         name='password'
+    //         ref={register({
+    //           required: true
+    //         })}
+    //       />
+    //     </Form.Field>
 
-        <Form.Field>
-          <label>Confirm Password</label>
-          <input
-            placeholder='Re-enter your password'
-            type='password'
-            name='confirmedPassword'
-            ref={register({
-              required: true
-            })}
-          />
-        </Form.Field>
-        <Button
-          fluid
-          type='submit'
-          loading={isSubmitting || loading}
-          color='green'
-        >
-          Register
-        </Button>
-      </Form>
-    </FormContainer>
+    //     <Form.Field>
+    //       <label>Confirm Password</label>
+    //       <input
+    //         placeholder='Re-enter your password'
+    //         type='password'
+    //         name='confirmedPassword'
+    //         ref={register({
+    //           required: true
+    //         })}
+    //       />
+    //     </Form.Field>
+    //     <Button
+    //       fluid
+    //       type='submit'
+    //       loading={isSubmitting || loading}
+    //       color='green'
+    //     >
+    //       Register
+    //     </Button>
+    //   </Form>
+    // </FormContainer>
+    <div>dsdf</div>
   );
 };
 

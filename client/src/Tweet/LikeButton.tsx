@@ -4,8 +4,8 @@ import { gql, useMutation } from '@apollo/client';
 import { ApolloCache } from '@apollo/client/core';
 import { LIKE_TWEET, UNLIKE_TWEET } from 'graphql/mutations/tweet';
 import { AppContext, IUser } from 'Context';
-import { Button, Label, Icon } from 'semantic-ui-react';
 import { ILike } from '.';
+import { Button } from '@chakra-ui/react';
 
 interface IProps {
   user: IUser | null;
@@ -109,17 +109,17 @@ const LikeButton: React.FC<IProps> = ({ user, likes, tweetId }) => {
   };
 
   return (
-    <Button as='div' labelPosition='right'>
+    <Button as='div'>
       <Button
         color={liked ? 'red' : undefined}
         onClick={handleClick}
         loading={likeTweetLoading || unlikeTweetLoading}
       >
-        <Icon name='heart' />
+        ❤️
       </Button>
-      <Label basic color='red' pointing='left'>
+      {/* <Label basic color='red' pointing='left'>
         {likes.length}
-      </Label>
+      </Label> */}
     </Button>
   );
 };

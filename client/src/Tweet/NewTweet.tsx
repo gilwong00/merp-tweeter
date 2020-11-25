@@ -4,7 +4,6 @@ import { useMutation } from '@apollo/client';
 import { CREATE_TWEET } from 'graphql/mutations/tweet';
 import { GET_ALL_TWEETS } from 'graphql/queries/tweet';
 import { ITweet } from 'Tweet';
-import { Segment, Form, Button } from 'semantic-ui-react';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import * as joi from 'joi';
@@ -17,14 +16,14 @@ const schema = joi.object({
   message: joi.string().required()
 });
 
-const TweetWrapper = styled(Segment)`
-  width: 400px;
-  margin: auto !important;
-`;
+// const TweetWrapper = styled(Segment)`
+//   width: 400px;
+//   margin: auto !important;
+// `;
 
-const TweetButton = styled(Button)`
-  margin-top: 15px !important;
-`;
+// const TweetButton = styled(Button)`
+//   margin-top: 15px !important;
+// `;
 
 const NewTweet = () => {
   const { pushNotification, user } = useContext(AppContext);
@@ -64,22 +63,23 @@ const NewTweet = () => {
   };
 
   return (
-    <TweetWrapper>
-      <Form noValidate onSubmit={handleSubmit(postTweet)}>
-        <input
-          type='text'
-          name='message'
-          placeholder='Tweet something'
-          ref={register({ required: true })}
-        />
-        <TweetButton
-          content='Tweet'
-          color='teal'
-          fluid={true}
-          loading={loading}
-        />
-      </Form>
-    </TweetWrapper>
+    // <TweetWrapper>
+    //   <Form noValidate onSubmit={handleSubmit(postTweet)}>
+    //     <input
+    //       type='text'
+    //       name='message'
+    //       placeholder='Tweet something'
+    //       ref={register({ required: true })}
+    //     />
+    //     <TweetButton
+    //       content='Tweet'
+    //       color='teal'
+    //       fluid={true}
+    //       loading={loading}
+    //     />
+    //   </Form>
+    // </TweetWrapper>
+    <div>dsf</div>
   );
 };
 

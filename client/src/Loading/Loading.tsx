@@ -1,10 +1,21 @@
 import React from 'react';
-import { Dimmer, Loader } from 'semantic-ui-react';
+import { CircularProgress } from '@chakra-ui/react';
+import styled from 'styled-components';
+
+const Spinner = styled(CircularProgress)`
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+`;
 
 const Loading = () => (
-  <Dimmer active>
-    <Loader size='massive'>Loading</Loader>
-  </Dimmer>
+  <Spinner
+    value={30}
+    size='200px'
+    color='teal.300'
+    isIndeterminate
+    thickness='4px'
+  />
 );
 
 export default Loading;

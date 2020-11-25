@@ -4,17 +4,19 @@ import AppProvider from 'Context';
 import { App } from 'App';
 import { ApolloProvider } from '@apollo/client';
 import { client } from 'Apollo';
+import { ChakraProvider } from '@chakra-ui/react';
 import reportWebVitals from './reportWebVitals';
 import './index.css';
-import 'semantic-ui-css/semantic.min.css';
 
 ReactDOM.render(
   <React.StrictMode>
-    <ApolloProvider client={client}>
-      <AppProvider>
-        <App />
-      </AppProvider>
-    </ApolloProvider>
+    <ChakraProvider>
+      <ApolloProvider client={client}>
+        <AppProvider>
+          <App />
+        </AppProvider>
+      </ApolloProvider>
+    </ChakraProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
