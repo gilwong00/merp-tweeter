@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { AppContext } from 'Context';
-import { useMutation } from '@apollo/client';
+import { gql, useMutation } from '@apollo/client';
 import { CREATE_TWEET } from 'graphql/mutations/tweet';
 import { GET_ALL_TWEETS } from 'graphql/queries/tweet';
 import { ITweet } from 'Tweet';
@@ -24,18 +24,29 @@ const NewTweet = () => {
       if (error) {
         return pushNotification('error', error.message);
       } else {
-        const currentTweets = cache.readQuery({
-          query: GET_ALL_TWEETS,
-          variables: { offset: 0 }
-        }) as { tweets: Array<ITweet> };
+        // can also just do cache.writeFragment. Write query was adding the new data on top on the existing tweets in cache. Modidy works best because we can order our data
+        cache.modify({
+          fields: {
+            tweets(existingTweets: Array<ITweet> = []) {
+              const newTweetRef = cache.writeFragment({
+                data: { __typename: 'Tweet', ...data.createTweet },
+                fragment: gql`
+                  fragment newTweet on Tweet {
+                    _id
+                    message
+                    dateCreated
+                    comments
+                    likes {
+                      _id
+                      username
+                      dateCreated
+                    }
+                  }
+                `
+              });
 
-        const tweets = [data.createTweet, ...currentTweets.tweets];
-        cache.writeQuery({
-          query: GET_ALL_TWEETS,
-          variables: { offset: 0 },
-          data: {
-            __typename: 'Query',
-            tweets
+              return [newTweetRef, ...existingTweets];
+            }
           }
         });
       }

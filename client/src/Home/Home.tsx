@@ -9,13 +9,12 @@ import { SimpleGrid, GridItem, Box, Button, Flex } from '@chakra-ui/react';
 const Home = () => {
   const [offset, setOffset] = useState<number>(0);
   const { user, pushNotification } = useContext(AppContext);
-  const { loading, error, data, fetchMore } = useQuery(GET_ALL_TWEETS, {
+  const { error, data, fetchMore } = useQuery(GET_ALL_TWEETS, {
     variables: { offset },
     notifyOnNetworkStatusChange: true
   });
 
   if (error) pushNotification('error', error.message);
-  if (loading) return <div>Loading</div>;
 
   return (
     <Box
@@ -35,12 +34,12 @@ const Home = () => {
       </SimpleGrid>
       <Flex justify='center' pt={20}>
         <Button
-          onClick={() => {
-            fetchMore({
-              variables: { offset: offset + 1 }
-            });
-            setOffset(current => (current += 1));
-          }}
+        // onClick={() => {
+        //   fetchMore({
+        //     variables: { offset: offset + 1 }
+        //   });
+        //   setOffset(current => (current += 1));
+        // }}
         >
           Load More
         </Button>
