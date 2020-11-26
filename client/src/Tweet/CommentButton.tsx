@@ -56,7 +56,6 @@ const CommentButton: React.FC<IProps> = ({ comments }) => {
     <Box>
       <IconButton
         w={100}
-        // isLoading={likeTweetLoading || unlikeTweetLoading}
         variant='outline'
         colorScheme='blue'
         aria-label='Like Tweet'

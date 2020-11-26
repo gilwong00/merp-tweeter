@@ -19,43 +19,45 @@ const Tweet: React.FC<IProps> = ({ tweet, user }) => {
   };
   const date = new Date(tweet.dateCreated);
   const displayDate = new Intl.DateTimeFormat('en-US', dateOptions).format(
-    new Date(date)
+    date
   );
-
   const displayTime = new Intl.DateTimeFormat('en-US', timeOptions).format(
-    new Date(date)
+    date
   );
 
   return (
     <Box borderWidth='1px' borderRadius='lg' overflow='hidden' p={5}>
-      <Flex dir='row' justify='space-between'>
+      <Link to={`/tweet/${tweet._id}`}>
+        <Flex dir='row' justify='space-between'>
+          <Box
+            color='gray.500'
+            fontWeight='semibold'
+            letterSpacing='wide'
+            fontSize='md'
+            textTransform='uppercase'
+            ml='2'
+          >
+            @{user?.username}
+            <div>
+              {displayDate} at {displayTime}
+            </div>
+          </Box>
+
+          <Avatar src='https://bit.ly/broken-link' />
+        </Flex>
+
         <Box
-          color='gray.500'
+          mt='1'
+          ml='2'
           fontWeight='semibold'
+          as='h4'
+          lineHeight='tight'
           letterSpacing='wide'
           fontSize='md'
-          textTransform='uppercase'
-          ml='2'
         >
-          @{user?.username}
-          <div>
-            {displayDate} at {displayTime}
-          </div>
+          {tweet.message}
         </Box>
-
-        <Avatar src='https://bit.ly/broken-link' />
-      </Flex>
-      <Box
-        mt='1'
-        ml='2'
-        fontWeight='semibold'
-        as='h4'
-        lineHeight='tight'
-        letterSpacing='wide'
-        fontSize='md'
-      >
-        {tweet.message}
-      </Box>
+      </Link>
       <Divider orientation='horizontal' mt={2} mb={2} />
       {/* might be able to make this a generic row component */}
       <Flex dir='row' justify='space-between'>

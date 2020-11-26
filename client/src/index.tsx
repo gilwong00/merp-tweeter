@@ -6,11 +6,12 @@ import { ApolloProvider } from '@apollo/client';
 import { client } from 'Apollo';
 import { ChakraProvider } from '@chakra-ui/react';
 import reportWebVitals from './reportWebVitals';
+import theme from './theme';
 import './index.css';
 
 ReactDOM.render(
   <React.StrictMode>
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
       <ApolloProvider client={client}>
         <AppProvider>
           <App />
