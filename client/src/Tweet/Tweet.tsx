@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { IUser } from 'Context';
 import { ITweet } from 'Tweet';
 import { Box, Flex, Avatar, Divider } from '@chakra-ui/react';
-import LikeButton from './LikeButton';
+import { LikeButton, CommentButton } from '.';
 
 interface IProps {
   tweet: ITweet;
@@ -60,6 +60,7 @@ const Tweet: React.FC<IProps> = ({ tweet, user }) => {
       {/* might be able to make this a generic row component */}
       <Flex dir='row' justify='space-between'>
         <LikeButton user={user} likes={tweet.likes} tweetId={tweet._id} />
+        <CommentButton comments={tweet.comments ?? []} />
       </Flex>
     </Box>
   );

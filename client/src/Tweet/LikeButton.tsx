@@ -5,8 +5,8 @@ import { ApolloCache } from '@apollo/client/core';
 import { LIKE_TWEET, UNLIKE_TWEET } from 'graphql/mutations/tweet';
 import { AppContext, IUser } from 'Context';
 import { ILike } from '.';
-import { Button } from '@chakra-ui/react';
-
+import { IconButton, Box, Flex } from '@chakra-ui/react';
+import { Heart } from 'react-feather';
 interface IProps {
   user: IUser | null;
   likes: Array<ILike>;
@@ -109,18 +109,22 @@ const LikeButton: React.FC<IProps> = ({ user, likes, tweetId }) => {
   };
 
   return (
-    <Button as='div'>
-      <Button
-        color={liked ? 'red' : undefined}
-        onClick={handleClick}
+    <Box>
+      <IconButton
+        w={100}
         isLoading={likeTweetLoading || unlikeTweetLoading}
-      >
-        ❤️
-      </Button>
-      {/* <Label basic color='red' pointing='left'>
-        {likes.length}
-      </Label> */}
-    </Button>
+        variant='outline'
+        colorScheme='red'
+        aria-label='Like Tweet'
+        onClick={handleClick}
+        icon={
+          <Flex align='center'>
+            <Heart fill={likes.length > 0 ? 'red' : 'none'} />
+            {likes.length > 0 && <Box pl={2}>{likes.length}</Box>}
+          </Flex>
+        }
+      />
+    </Box>
   );
 };
 

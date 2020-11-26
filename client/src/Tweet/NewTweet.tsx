@@ -2,19 +2,24 @@ import React, { useContext } from 'react';
 import { AppContext } from 'Context';
 import { gql, useMutation } from '@apollo/client';
 import { CREATE_TWEET } from 'graphql/mutations/tweet';
-import { GET_ALL_TWEETS } from 'graphql/queries/tweet';
 import { ITweet } from 'Tweet';
-import { FormControl, Input, Stack, Box, Button } from '@chakra-ui/react';
+import {
+  FormControl,
+  Input,
+  Stack,
+  Box,
+  Button,
+  FormErrorMessage
+} from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import * as joi from 'joi';
-
 interface ITweetInput {
   message: string;
 }
 
 const schema = joi.object({
-  message: joi.string().required()
+  message: joi.string().required().min(5)
 });
 
 const NewTweet = () => {
@@ -24,7 +29,6 @@ const NewTweet = () => {
       if (error) {
         return pushNotification('error', error.message);
       } else {
-        // can also just do cache.writeFragment. Write query was adding the new data on top on the existing tweets in cache. Modidy works best because we can order our data
         cache.modify({
           fields: {
             tweets(existingTweets: Array<ITweet> = []) {
@@ -68,6 +72,9 @@ const NewTweet = () => {
     reset();
   };
 
+  const hasFormErrors =
+    ((errors && errors['message']?.message) ?? '').length > 0;
+
   return (
     <Stack direction='column' spacing={2} align='center'>
       <Box
@@ -78,7 +85,7 @@ const NewTweet = () => {
         align='center'
       >
         <form onSubmit={handleSubmit(postTweet)}>
-          <FormControl w={600}>
+          <FormControl w={600} isInvalid={hasFormErrors}>
             <Input
               type='text'
               name='message'
@@ -86,6 +93,7 @@ const NewTweet = () => {
               placeholder='Tweet something'
               ref={register({ required: true })}
             />
+            <FormErrorMessage>{errors.message?.message}</FormErrorMessage>
           </FormControl>
 
           <Button

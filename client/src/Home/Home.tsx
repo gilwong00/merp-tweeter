@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { useQuery } from '@apollo/client';
 import { GET_ALL_TWEETS } from 'graphql/queries/tweet';
 import { ITweet, Tweet } from 'Tweet';
-import { SearchBar } from 'SearchBar';
+// import { SearchBar } from 'SearchBar';
 import { AppContext } from 'Context';
 import { SimpleGrid, GridItem, Box, Button, Flex } from '@chakra-ui/react';
 
@@ -25,6 +25,7 @@ const Home = () => {
       minH={800}
       h='auto'
     >
+      {/* <SearchBar /> */}
       <SimpleGrid columns={2} spacingX='40px' spacingY='20px'>
         {data?.tweets.map((tweet: ITweet) => (
           <GridItem key={tweet._id}>
@@ -32,14 +33,15 @@ const Home = () => {
           </GridItem>
         ))}
       </SimpleGrid>
-      <Flex justify='center' pt={20}>
+      <Flex justify='center' pt={60}>
         <Button
-        // onClick={() => {
-        //   fetchMore({
-        //     variables: { offset: offset + 1 }
-        //   });
-        //   setOffset(current => (current += 1));
-        // }}
+          colorScheme='teal'
+          onClick={() => {
+            fetchMore({
+              variables: { offset: offset + 1 }
+            });
+            setOffset(current => (current += 1));
+          }}
         >
           Load More
         </Button>

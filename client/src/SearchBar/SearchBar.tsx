@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 // import { Search, SearchProps, SearchResultProps } from 'semantic-ui-react';
+
 import styled from 'styled-components';
 
 // const TweetSearch = styled(Search)`
@@ -14,17 +15,7 @@ import styled from 'styled-components';
 
 const SearchBar = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
-  return (
-    // <TweetSearch
-    //   minCharacters={2}
-    //   onSearchChange={(e: React.SyntheticEvent, data: SearchProps) =>
-    //     setSearchTerm(data.value ?? '')
-    //   }
-    //   resultRenderer={resultRenderer}
-    //   value={searchTerm}
-    // />
-    <div>sssad</div>
-  );
+  return <></>;
 };
 
 export default SearchBar;
