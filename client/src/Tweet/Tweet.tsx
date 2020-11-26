@@ -1,9 +1,9 @@
 import React from 'react';
-import { Card, Image } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { IUser } from 'Context';
 import { ITweet } from 'Tweet';
-import LikeButton from './LikeButton';
+import { Box, Flex, Avatar, Divider } from '@chakra-ui/react';
+import { LikeButton, CommentButton } from '.';
 
 interface IProps {
   tweet: ITweet;
@@ -27,23 +27,42 @@ const Tweet: React.FC<IProps> = ({ tweet, user }) => {
   );
 
   return (
-    <Card fluid>
-      <Card.Content>
-        <Image
-          floated='right'
-          size='mini'
-          src='https://react.semantic-ui.com/images/avatar/large/molly.png'
-        />
-        <Card.Header>{user?.username}</Card.Header>
-        <Card.Meta as={Link} to={`/tweet/${tweet._id}`}>
-          {displayDate} at {displayTime}
-        </Card.Meta>
-        <Card.Description>{tweet.message}</Card.Description>
-      </Card.Content>
-      <Card.Content extra>
+    <Box borderWidth='1px' borderRadius='lg' overflow='hidden' p={5}>
+      <Flex dir='row' justify='space-between'>
+        <Box
+          color='gray.500'
+          fontWeight='semibold'
+          letterSpacing='wide'
+          fontSize='md'
+          textTransform='uppercase'
+          ml='2'
+        >
+          @{user?.username}
+          <div>
+            {displayDate} at {displayTime}
+          </div>
+        </Box>
+
+        <Avatar src='https://bit.ly/broken-link' />
+      </Flex>
+      <Box
+        mt='1'
+        ml='2'
+        fontWeight='semibold'
+        as='h4'
+        lineHeight='tight'
+        letterSpacing='wide'
+        fontSize='md'
+      >
+        {tweet.message}
+      </Box>
+      <Divider orientation='horizontal' mt={2} mb={2} />
+      {/* might be able to make this a generic row component */}
+      <Flex dir='row' justify='space-between'>
         <LikeButton user={user} likes={tweet.likes} tweetId={tweet._id} />
-      </Card.Content>
-    </Card>
+        <CommentButton comments={tweet.comments ?? []} />
+      </Flex>
+    </Box>
   );
 };
 

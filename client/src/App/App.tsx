@@ -1,40 +1,34 @@
 import React, { useContext } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import { Container, Segment } from 'semantic-ui-react';
+import { Container } from '@chakra-ui/react';
 import { Home } from 'Home';
 import { Register, Login } from 'Auth';
 import { ProtectedRoute } from 'ProtectedRoute';
-import { Notification } from 'Notification';
+// import { Notification } from 'Notification';
 import { Navbar } from 'Navbar';
 import { Loading } from 'Loading';
 import { NewTweet } from 'Tweet';
 import { AppContext } from 'Context';
-import styled from 'styled-components';
-
-const StyledSegment = styled(Segment)`
-  height: auto;
-  min-height: 1200px;
-`;
 
 const App = () => {
   const { loading } = useContext(AppContext);
 
-  if (loading) return <Loading />;
-
   return (
     <Router>
-      <Container>
-        <StyledSegment>
-          <Navbar />
+      <Navbar />
+      {loading ? (
+        <Loading />
+      ) : (
+        <Container maxW='xl' mt={5}>
           <Switch>
             <Route path='/login' component={Login} />
             <Route path='/register' component={Register} />
             <ProtectedRoute exact path='/tweet/new' component={NewTweet} />
             <ProtectedRoute exact path='/' component={Home} />
           </Switch>
-          <Notification />
-        </StyledSegment>
-      </Container>
+          {/* <Notification /> */}
+        </Container>
+      )}
     </Router>
   );
 };

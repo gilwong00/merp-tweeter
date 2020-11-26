@@ -7,6 +7,9 @@ export const tweets = authenticated(
   async (_: any, args: { offset: number }) => {
     try {
       const { offset } = args;
+      // const totalDocs = await Tweet.count({});
+
+      // update this to return a hasMore tweets property to conditionally disable the load more tweets
       return await Tweet.find({})
         .limit(LIMIT)
         .skip((offset ?? 0) * LIMIT)

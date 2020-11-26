@@ -1,18 +1,16 @@
-import React, { useState, useContext } from 'react';
-import { useLocation, useHistory } from 'react-router-dom';
-import { Menu } from 'semantic-ui-react';
+import React, { useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { LOGOUT } from 'graphql/mutations/user';
 import { useMutation, useApolloClient } from '@apollo/client';
 import { useCookie } from 'hooks';
 import { AppContext } from 'Context';
+import { Flex, Button, Heading, Box } from '@chakra-ui/react';
+import './Navbar.css';
 
 const Navbar = () => {
   const { user, pushNotification } = useContext(AppContext);
-  const location = useLocation();
   const history = useHistory();
-  const path = location.pathname === '/' ? 'home' : location.pathname.substr(1);
-  const [activeItem, setActiveItem] = useState<string>(path);
   const { removeValue } = useCookie();
   const apolloClient = useApolloClient();
 
@@ -26,58 +24,57 @@ const Navbar = () => {
   });
 
   return (
-    <Menu pointing secondary size='massive' color='violet' inverted>
-      {user ? (
-        <>
-          <Menu.Item
-            name={user.username}
-            as={Link}
-            to='/'
-            onClick={() => setActiveItem('/')}
-          >
-            Merp Tweeter
-          </Menu.Item>
-
-          <Menu.Menu position='right'>
-            <Menu.Item
-              name='newTweet'
-              active={activeItem === 'newTweet'}
-              onClick={() => setActiveItem('newTweet')}
+    <Flex zIndex={1} position='sticky' top={0} bg='purple.600' p={4}>
+      <Flex flex={1} align='center' justify='space-between'>
+        <Link to='/'>
+          <Heading>Merp Tweeter</Heading>
+        </Link>
+      </Flex>
+      <Flex flex={1} ml='auto' align='center' justify='flex-end'>
+        {user ? (
+          <Box d='flex'>
+            <Button
+              className='nav-btn'
               as={Link}
               to='/tweet/new'
-            />
-            <Menu.Item name='logout' onClick={() => logout()} />
-          </Menu.Menu>
-        </>
-      ) : (
-        <>
-          <Menu.Item
-            name='home'
-            active={activeItem === 'home'}
-            onClick={() => setActiveItem('home')}
-            as={Link}
-            to='/'
-          />
-
-          <Menu.Menu position='right'>
-            <Menu.Item
-              name='login'
-              active={activeItem === 'login'}
-              onClick={() => setActiveItem('login')}
+              colorScheme='teal'
+              size='md'
+            >
+              New Tweet
+            </Button>
+            <Button
+              className='nav-btn'
+              colorScheme='teal'
+              size='md'
+              onClick={() => logout()}
+            >
+              Logout
+            </Button>
+          </Box>
+        ) : (
+          <Box d='flex'>
+            <Button
+              className='nav-btn'
               as={Link}
               to='/login'
-            />
-            <Menu.Item
-              name='register'
-              active={activeItem === 'register'}
-              onClick={() => setActiveItem('register')}
+              colorScheme='teal'
+              size='md'
+            >
+              Login
+            </Button>
+            <Button
+              className='nav-btn'
               as={Link}
               to='/register'
-            />
-          </Menu.Menu>
-        </>
-      )}
-    </Menu>
+              colorScheme='teal'
+              size='md'
+            >
+              Register
+            </Button>
+          </Box>
+        )}
+      </Flex>
+    </Flex>
   );
 };
 

@@ -4,9 +4,9 @@ import { gql, useMutation } from '@apollo/client';
 import { ApolloCache } from '@apollo/client/core';
 import { LIKE_TWEET, UNLIKE_TWEET } from 'graphql/mutations/tweet';
 import { AppContext, IUser } from 'Context';
-import { Button, Label, Icon } from 'semantic-ui-react';
 import { ILike } from '.';
-
+import { IconButton, Box, Flex } from '@chakra-ui/react';
+import { Heart } from 'react-feather';
 interface IProps {
   user: IUser | null;
   likes: Array<ILike>;
@@ -109,18 +109,22 @@ const LikeButton: React.FC<IProps> = ({ user, likes, tweetId }) => {
   };
 
   return (
-    <Button as='div' labelPosition='right'>
-      <Button
-        color={liked ? 'red' : undefined}
+    <Box>
+      <IconButton
+        w={100}
+        isLoading={likeTweetLoading || unlikeTweetLoading}
+        variant='outline'
+        colorScheme='red'
+        aria-label='Like Tweet'
         onClick={handleClick}
-        loading={likeTweetLoading || unlikeTweetLoading}
-      >
-        <Icon name='heart' />
-      </Button>
-      <Label basic color='red' pointing='left'>
-        {likes.length}
-      </Label>
-    </Button>
+        icon={
+          <Flex align='center'>
+            <Heart fill={likes.length > 0 ? 'red' : 'none'} />
+            {likes.length > 0 && <Box pl={2}>{likes.length}</Box>}
+          </Flex>
+        }
+      />
+    </Box>
   );
 };
 

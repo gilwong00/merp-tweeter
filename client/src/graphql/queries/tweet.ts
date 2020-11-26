@@ -12,10 +12,10 @@ export const GET_ALL_TWEETS = gql`
         username
         dateCreated
       }
-      user {
-        _id
-        username
-      }
+      # user {
+      #   _id
+      #   username
+      # }
     }
   }
 `;

@@ -1,6 +1,5 @@
 import React, { useEffect, useContext } from 'react';
 import { AppContext } from 'Context';
-import { Message, Transition, List } from 'semantic-ui-react';
 import styled from 'styled-components';
 
 const Toaster = styled.div`
@@ -25,7 +24,7 @@ const Notification: React.FC = () => {
 
   return (
     <>
-      <Toaster>
+      {/* <Toaster>
         <Transition.Group as={List} animation='fly left' duration={800}>
           {notifications.map(notification => (
             <Message
@@ -46,7 +45,7 @@ const Notification: React.FC = () => {
             </Message>
           ))}
         </Transition.Group>
-      </Toaster>
+      </Toaster> */}
     </>
   );
 };

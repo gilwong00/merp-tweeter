@@ -6,9 +6,17 @@ import { AUTH_USER } from 'graphql/mutations/user';
 import { WHO_AM_I } from 'graphql/queries/user';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
-import { Button, Form, Segment, Header } from 'semantic-ui-react';
 import * as joi from 'joi';
-import styled from 'styled-components';
+import {
+  FormControl,
+  FormLabel,
+  FormErrorMessage,
+  Input,
+  Stack,
+  Box,
+  Button,
+  Flex
+} from '@chakra-ui/react';
 
 interface IFormInputs {
   username: string;
@@ -19,13 +27,6 @@ const schema = joi.object({
   username: joi.string().required(),
   password: joi.string().required()
 });
-
-const FormContainer = styled(Segment)`
-  width: 550px;
-  margin-top: 2rem !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-`;
 
 const Login = () => {
   const { pushNotification } = useContext(AppContext);
@@ -53,8 +54,6 @@ const Login = () => {
     resolver: joiResolver(schema)
   });
 
-  // const { isDirty, isSubmitting } = formState;
-
   const onSubmit = async (data: IFormInputs) => {
     const { username, password } = data;
 
@@ -64,40 +63,38 @@ const Login = () => {
     }
   };
   return (
-    <FormContainer>
-      <Form noValidate onSubmit={handleSubmit(onSubmit)}>
-        <Header as='h1' textAlign='center'>
-          Login
-        </Header>
-        <Form.Field>
-          <label>Username</label>
-          <input
-            placeholder='Enter a username'
-            type='text'
-            name='username'
-            ref={register({
-              required: true
-            })}
-          />
-        </Form.Field>
-
-        <Form.Field>
-          <label>Password</label>
-          <input
-            placeholder='Enter a password'
-            type='password'
-            name='password'
-            ref={register({
-              required: true
-            })}
-          />
-        </Form.Field>
-
-        <Button fluid type='submit' loading={loading} color='green'>
-          Login
-        </Button>
-      </Form>
-    </FormContainer>
+    <Stack direction='column' spacing={2} align='center'>
+      <Box
+        borderWidth='1px'
+        borderRadius='sm'
+        overflow='hidden'
+        p={5}
+        align='center'
+      >
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <FormControl w={600}>
+            <FormLabel>Username</FormLabel>
+            <Input
+              type='text'
+              name='username'
+              mb={5}
+              ref={register({ required: true })}
+            />
+            <FormLabel>Password</FormLabel>
+            <Input
+              type='password'
+              name='password'
+              ref={register({ required: true })}
+            />
+          </FormControl>
+          <Flex justify='flex-end' mt={5}>
+            <Button isLoading={loading} colorScheme='teal' type='submit'>
+              Login
+            </Button>
+          </Flex>
+        </form>
+      </Box>
+    </Stack>
   );
 };
 
