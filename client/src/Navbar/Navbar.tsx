@@ -16,7 +16,7 @@ const Navbar = () => {
 
   const [logout] = useMutation(LOGOUT, {
     update() {
-      apolloClient.resetStore();
+      apolloClient.cache.reset();
       removeValue('token');
       pushNotification('success', `Logged out`);
       history.push('/login');
