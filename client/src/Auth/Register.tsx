@@ -1,10 +1,21 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { REGISTER_USER } from 'graphql/mutations/user';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import * as joi from 'joi';
-import styled from 'styled-components';
+import {
+  FormControl,
+  FormLabel,
+  FormErrorMessage,
+  Input,
+  Stack,
+  Box,
+  Button,
+  Flex
+} from '@chakra-ui/react';
+import { AppContext } from 'Context';
 
 interface IFormInputs {
   username: string;
@@ -23,107 +34,78 @@ const schema = joi.object({
   confirmedPassword: joi.string().required()
 });
 
-// const FormContainer = styled(Segment)`
-//   width: 550px;
-//   margin-top: 2rem !important;
-//   margin-left: auto !important;
-//   margin-right: auto !important;
-// `;
-
 const Register = () => {
+  const { pushNotification } = useContext(AppContext);
+  const history = useHistory();
   const [registerUser, { loading, error }] = useMutation(REGISTER_USER, {
-    update(cache, { data: { registerUser } }) {
-      console.log('register', registerUser);
+    onCompleted: (): void => {
+      if (error) {
+        return pushNotification('error', `Could not register ${error.message}`);
+      } else {
+        pushNotification('success', 'Registed Successfully');
+        return history.push('/login');
+      }
     }
   });
 
-  const {
-    register,
-    handleSubmit,
-    errors,
-    formState,
-    reset
-  } = useForm<IFormInputs>({
+  const { register, handleSubmit, errors, reset } = useForm<IFormInputs>({
     resolver: joiResolver(schema)
   });
-
-  const { isDirty, isSubmitting } = formState;
 
   const onSubmit = async (data: IFormInputs) => {
     const { username, email, password, confirmedPassword } = data;
 
     if (password === confirmedPassword) {
-      // call mutation
       await registerUser({ variables: { username, email, password } });
       reset();
     }
   };
 
-  // TODO add error validations
   return (
-    // <FormContainer>
-    //   <Form noValidate onSubmit={handleSubmit(onSubmit)}>
-    //     <Header as='h1' textAlign='center'>
-    //       Register
-    //     </Header>
-    //     <Form.Field>
-    //       <label>Username</label>
-    //       <input
-    //         placeholder='Enter a username'
-    //         type='text'
-    //         name='username'
-    //         ref={register({
-    //           required: true
-    //         })}
-    //       />
-    //     </Form.Field>
-
-    //     <Form.Field>
-    //       <label>Email</label>
-    //       <input
-    //         placeholder='Enter a email'
-    //         type='text'
-    //         name='email'
-    //         ref={register({
-    //           required: true
-    //         })}
-    //       />
-    //     </Form.Field>
-
-    //     <Form.Field>
-    //       <label>Password</label>
-    //       <input
-    //         placeholder='Enter a password'
-    //         type='password'
-    //         name='password'
-    //         ref={register({
-    //           required: true
-    //         })}
-    //       />
-    //     </Form.Field>
-
-    //     <Form.Field>
-    //       <label>Confirm Password</label>
-    //       <input
-    //         placeholder='Re-enter your password'
-    //         type='password'
-    //         name='confirmedPassword'
-    //         ref={register({
-    //           required: true
-    //         })}
-    //       />
-    //     </Form.Field>
-    //     <Button
-    //       fluid
-    //       type='submit'
-    //       loading={isSubmitting || loading}
-    //       color='green'
-    //     >
-    //       Register
-    //     </Button>
-    //   </Form>
-    // </FormContainer>
-    <div>dsdf</div>
+    <Stack direction='column' spacing={2} align='center'>
+      <Box
+        borderWidth='1px'
+        borderRadius='sm'
+        overflow='hidden'
+        p={5}
+        align='center'
+      >
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <FormControl w={600}>
+            <FormLabel>Username</FormLabel>
+            <Input
+              type='text'
+              name='username'
+              mb={5}
+              ref={register({ required: true })}
+            />
+            <FormLabel>Email</FormLabel>
+            <Input
+              type='email'
+              name='email'
+              ref={register({ required: true })}
+            />
+            <FormLabel>Password</FormLabel>
+            <Input
+              type='password'
+              name='password'
+              ref={register({ required: true })}
+            />
+            <FormLabel>Confirm Password</FormLabel>
+            <Input
+              type='password'
+              name='confirmedPassword'
+              ref={register({ required: true })}
+            />
+          </FormControl>
+          <Flex justify='flex-end' mt={5}>
+            <Button isLoading={loading} colorScheme='teal' type='submit'>
+              Login
+            </Button>
+          </Flex>
+        </form>
+      </Box>
+    </Stack>
   );
 };
 

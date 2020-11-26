@@ -7,7 +7,7 @@ import { ProtectedRoute } from 'ProtectedRoute';
 // import { Notification } from 'Notification';
 import { Navbar } from 'Navbar';
 import { Loading } from 'Loading';
-// import { NewTweet } from 'Tweet';
+import { NewTweet } from 'Tweet';
 import { AppContext } from 'Context';
 
 const App = () => {
@@ -23,7 +23,7 @@ const App = () => {
           <Switch>
             <Route path='/login' component={Login} />
             <Route path='/register' component={Register} />
-            {/* <ProtectedRoute exact path='/tweet/new' component={NewTweet} /> */}
+            <ProtectedRoute exact path='/tweet/new' component={NewTweet} />
             <ProtectedRoute exact path='/' component={Home} />
           </Switch>
           {/* <Notification /> */}

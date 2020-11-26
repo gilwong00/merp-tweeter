@@ -5,7 +5,7 @@ const cache: InMemoryCache = new InMemoryCache({
     Query: {
       fields: {
         tweets: {
-          keyArgs: ['offset'],
+          keyArgs: [],
           // taking our incoming tweets and merging with our existing tweets for pagination
           merge(existing, incoming) {
             return [...(existing ?? []), ...incoming];

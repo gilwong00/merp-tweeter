@@ -113,7 +113,7 @@ const LikeButton: React.FC<IProps> = ({ user, likes, tweetId }) => {
       <Button
         color={liked ? 'red' : undefined}
         onClick={handleClick}
-        loading={likeTweetLoading || unlikeTweetLoading}
+        isLoading={likeTweetLoading || unlikeTweetLoading}
       >
         ❤️
       </Button>
