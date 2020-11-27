@@ -28,10 +28,16 @@ const typeDefs = gql`
     user: User!
   }
 
+  type SearchResult {
+    _id: ID!
+    message: String!
+    user: User!
+  }
+
   type Query {
     tweets(offset: Int): [Tweet]
     getLoggedInUser: User
-    search(searchTerm: String!): [Tweet]
+    search(searchTerm: String!): [SearchResult]
   }
 
   type Mutation {

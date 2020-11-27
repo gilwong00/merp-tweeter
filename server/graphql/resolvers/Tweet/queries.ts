@@ -31,7 +31,7 @@ export const search = authenticated(
 
       const tweets = await Tweet.find({
         message: { $regex: searchTerm, $options: 'i' }
-      });
+      }).populate({ path: 'user', model: 'User' });
 
       return tweets;
     } catch (err) {

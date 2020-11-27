@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
-import { AppContext } from 'Context';
+import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { AUTH_USER } from 'graphql/mutations/user';
 import { WHO_AM_I } from 'graphql/queries/user';
+import { useToastNotification } from 'hooks';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import * as joi from 'joi';
@@ -29,7 +29,7 @@ const schema = joi.object({
 });
 
 const Login = () => {
-  const { pushNotification } = useContext(AppContext);
+  const { pushNotification } = useToastNotification();
   const history = useHistory();
   const [authUser, { loading, error }] = useMutation(AUTH_USER, {
     update(cache, { data }) {
@@ -62,6 +62,11 @@ const Login = () => {
       reset();
     }
   };
+
+  const isValid = (field: 'username' | 'password') => {
+    return ((errors && errors[field]?.message) ?? '').length > 0;
+  };
+
   return (
     <Stack direction='column' spacing={2} align='center'>
       <Box
@@ -72,7 +77,7 @@ const Login = () => {
         align='center'
       >
         <form onSubmit={handleSubmit(onSubmit)}>
-          <FormControl w={600}>
+          <FormControl w={600} isInvalid={isValid('username')}>
             <FormLabel>Username</FormLabel>
             <Input
               type='text'
@@ -80,12 +85,16 @@ const Login = () => {
               mb={5}
               ref={register({ required: true })}
             />
+            <FormErrorMessage>{errors.username?.message}</FormErrorMessage>
+          </FormControl>
+          <FormControl w={600} isInvalid={isValid('password')}>
             <FormLabel>Password</FormLabel>
             <Input
               type='password'
               name='password'
               ref={register({ required: true })}
             />
+            <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
           </FormControl>
           <Flex justify='flex-end' mt={5}>
             <Button isLoading={loading} colorScheme='teal' type='submit'>

@@ -1,4 +1,5 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
+import { useToastNotification } from 'hooks';
 import { AppContext } from 'Context';
 import { useHistory } from 'react-router-dom';
 import { gql, useMutation } from '@apollo/client';
@@ -38,7 +39,7 @@ interface IProps {
 }
 
 const CommentButton: React.FC<IProps> = ({ comments }) => {
-  const { pushNotification } = useContext(AppContext);
+  const { pushNotification } = useToastNotification();
   const [showCommentDialog, setShowCommentDialog] = useState<boolean>(false);
 
   const { register, handleSubmit, errors, reset } = useForm<ICommentInputs>({

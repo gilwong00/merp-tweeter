@@ -4,7 +4,6 @@ import { Container } from '@chakra-ui/react';
 import { Home } from 'Home';
 import { Register, Login } from 'Auth';
 import { ProtectedRoute } from 'ProtectedRoute';
-// import { Notification } from 'Notification';
 import { Navbar } from 'Navbar';
 import { Loading } from 'Loading';
 import { NewTweet } from 'Tweet';
@@ -26,7 +25,6 @@ const App = () => {
             <ProtectedRoute exact path='/tweet/new' component={NewTweet} />
             <ProtectedRoute exact path='/' component={Home} />
           </Switch>
-          {/* <Notification /> */}
         </Container>
       )}
     </Router>

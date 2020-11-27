@@ -3,6 +3,7 @@ import { AppContext } from 'Context';
 import { gql, useMutation } from '@apollo/client';
 import { CREATE_TWEET } from 'graphql/mutations/tweet';
 import { ITweet } from 'Tweet';
+import { useToastNotification } from 'hooks';
 import {
   FormControl,
   Input,
@@ -19,11 +20,12 @@ interface ITweetInput {
 }
 
 const schema = joi.object({
-  message: joi.string().required().min(5)
+  message: joi.string().required().min(2)
 });
 
 const NewTweet = () => {
-  const { pushNotification, user } = useContext(AppContext);
+  const { user } = useContext(AppContext);
+  const { pushNotification } = useToastNotification();
   const [createTweet, { loading, error }] = useMutation(CREATE_TWEET, {
     update(cache, { data }): void {
       if (error) {
@@ -45,10 +47,13 @@ const NewTweet = () => {
                       username
                       dateCreated
                     }
+                    user {
+                      _id
+                      username
+                    }
                   }
                 `
               });
-
               return [newTweetRef, ...existingTweets];
             }
           }

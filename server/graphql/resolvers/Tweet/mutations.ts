@@ -16,13 +16,18 @@ interface ILikeTweetArgs {
   };
 }
 
-export const createTweet = authenticated(async (_: any, args: ITweetArgs) => {
+export const createTweet = async (_: any, args: ITweetArgs) => {
   try {
-    return await new Tweet(args.input).save();
+    const created = await new Tweet(args.input).save();
+
+    return await Tweet.findOne({ _id: created._id }).populate({
+      path: 'user',
+      model: 'User'
+    });
   } catch (err) {
     throw err;
   }
-});
+};
 
 export const like = authenticated(async (_: any, args: ILikeTweetArgs) => {
   try {

@@ -3,15 +3,16 @@ import { useHistory } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { LOGOUT } from 'graphql/mutations/user';
 import { useMutation, useApolloClient } from '@apollo/client';
-import { useCookie } from 'hooks';
+import { useCookie, useToastNotification } from 'hooks';
 import { AppContext } from 'Context';
 import { Flex, Button, Heading, Box } from '@chakra-ui/react';
 import './Navbar.css';
 
 const Navbar = () => {
-  const { user, pushNotification } = useContext(AppContext);
+  const { user } = useContext(AppContext);
   const history = useHistory();
   const { removeValue } = useCookie();
+  const { pushNotification } = useToastNotification();
   const apolloClient = useApolloClient();
 
   const [logout] = useMutation(LOGOUT, {
@@ -30,9 +31,22 @@ const Navbar = () => {
           <Heading>Merp Tweeter</Heading>
         </Link>
       </Flex>
+      {/* need to make this mobile friendly */}
+      {/* <Box display={{ base: 'block', md: 'none' }}>
+        <svg
+          fill='white'
+          width='12px'
+          viewBox='0 0 20 20'
+          xmlns='http://www.w3.org/2000/svg'
+        >
+          <title>Menu</title>
+          <path d='M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z' />
+        </svg>
+      </Box> */}
+
       <Flex flex={1} ml='auto' align='center' justify='flex-end'>
         {user ? (
-          <Box d='flex'>
+          <Box d={{ sm: true ? 'block' : 'none', md: 'flex' }}>
             <Button
               className='nav-btn'
               as={Link}

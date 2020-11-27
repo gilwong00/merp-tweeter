@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { gql, useMutation } from '@apollo/client';
 import { ApolloCache } from '@apollo/client/core';
 import { LIKE_TWEET, UNLIKE_TWEET } from 'graphql/mutations/tweet';
-import { AppContext, IUser } from 'Context';
+import { IUser } from 'Context';
 import { ILike } from '.';
+import { useToastNotification } from 'hooks';
 import { IconButton, Box, Flex } from '@chakra-ui/react';
 import { Heart } from 'react-feather';
 interface IProps {
@@ -64,7 +65,7 @@ const updateLikeCount = (
 };
 
 const LikeButton: React.FC<IProps> = ({ user, likes, tweetId }) => {
-  const { pushNotification } = useContext(AppContext);
+  const { pushNotification } = useToastNotification();
   const [liked, setLiked] = useState<ILike | null>();
   const history = useHistory();
   const [

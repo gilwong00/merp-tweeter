@@ -12,6 +12,10 @@ export const CREATE_TWEET = gql`
       likes {
         _id
       }
+      user {
+        _id
+        username
+      }
     }
   }
 `;

@@ -25,7 +25,9 @@ export const SEARCH_TWEETS = gql`
     search(searchTerm: $searchTerm) {
       _id
       message
-      dateCreated
+      user {
+        username
+      }
     }
   }
 `;
