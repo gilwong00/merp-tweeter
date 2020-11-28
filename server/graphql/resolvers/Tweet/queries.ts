@@ -39,3 +39,18 @@ export const search = authenticated(
     }
   }
 );
+
+export const getTweet = async (_: any, args: { tweetId: string }) => {
+  try {
+    const tweet = await Tweet.findOne({ _id: args.tweetId })
+      .populate({ path: 'likes', model: 'Like' })
+      .populate({ path: 'comments', model: 'Comment' })
+      .populate({ path: 'user', model: 'User' });
+
+    if (!tweet) throw new Error(`Could not find tweet with id ${args.tweetId}`);
+
+    return tweet;
+  } catch (err) {
+    throw err;
+  }
+};

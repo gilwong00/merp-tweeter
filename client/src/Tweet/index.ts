@@ -2,6 +2,7 @@ export { default as Tweet } from './Tweet';
 export { default as NewTweet } from './NewTweet';
 export { default as LikeButton } from './LikeButton';
 export { default as CommentButton } from './CommentButton';
+export { default as TweetDetails } from './TweetDetails';
 
 export interface IComment {
   content: string;

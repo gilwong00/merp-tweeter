@@ -6,7 +6,7 @@ import { Register, Login } from 'Auth';
 import { ProtectedRoute } from 'ProtectedRoute';
 import { Navbar } from 'Navbar';
 import { Loading } from 'Loading';
-import { NewTweet } from 'Tweet';
+import { NewTweet, TweetDetails } from 'Tweet';
 import { AppContext } from 'Context';
 
 const App = () => {
@@ -22,7 +22,8 @@ const App = () => {
           <Switch>
             <Route path='/login' component={Login} />
             <Route path='/register' component={Register} />
-            <ProtectedRoute exact path='/tweet/new' component={NewTweet} />
+            <ProtectedRoute path='/tweet/:tweetId' component={TweetDetails} />
+            <ProtectedRoute path='/tweet/new' component={NewTweet} />
             <ProtectedRoute exact path='/' component={Home} />
           </Switch>
         </Container>

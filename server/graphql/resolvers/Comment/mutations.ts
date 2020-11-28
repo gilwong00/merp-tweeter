@@ -1,4 +1,5 @@
 import { Comment, Tweet } from '../../../models';
+import authenticated from '../../../middleware/isAuth';
 
 interface ICommentArgs {
   input: {
@@ -8,7 +9,7 @@ interface ICommentArgs {
   };
 }
 
-export const comment = async (_: any, args: ICommentArgs) => {
+export const comment = authenticated(async (_: any, args: ICommentArgs) => {
   try {
     const newComment = await new Comment(args.input).save();
 
@@ -23,4 +24,4 @@ export const comment = async (_: any, args: ICommentArgs) => {
   } catch (err) {
     throw err;
   }
-};
+});

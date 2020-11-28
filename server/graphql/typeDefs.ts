@@ -19,11 +19,19 @@ const typeDefs = gql`
     tweetId: ID!
   }
 
+  type Comment {
+    _id: ID!
+    comment: String!
+    username: String!
+    tweetId: String!
+    dateCreated: Date!
+  }
+
   type Tweet {
     _id: ID!
     message: String!
     dateCreated: Date!
-    comments: [String]
+    comments: [Comment]
     likes: [Like]
     user: User!
   }
@@ -34,18 +42,11 @@ const typeDefs = gql`
     user: User!
   }
 
-  type Comment {
-    _id: ID!
-    comment: String!
-    username: String!
-    tweetId: String!
-    dateCreated: Date!
-  }
-
   type Query {
     tweets(offset: Int): [Tweet]
     getLoggedInUser: User
     search(searchTerm: String!): [SearchResult]
+    getTweet(tweetId: ID!): Tweet!
   }
 
   type Mutation {

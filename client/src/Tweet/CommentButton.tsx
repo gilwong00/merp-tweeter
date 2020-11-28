@@ -62,7 +62,10 @@ const CommentButton: React.FC<IProps> = ({ tweetId, comments }) => {
         fragment: COMMENT_FRAGMENT
       });
 
-      const comments = [...(tweet?.comments ?? []), data.comment._id];
+      const comments = [
+        ...(tweet?.comments ?? []),
+        { __typename: 'Comment', _id: data.comment._id }
+      ];
 
       cache.writeFragment({
         id,
