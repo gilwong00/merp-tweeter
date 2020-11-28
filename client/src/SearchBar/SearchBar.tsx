@@ -3,8 +3,8 @@ import { useLazyQuery } from '@apollo/client';
 import { SEARCH_TWEETS } from 'graphql/queries/tweet';
 import { Box, List, ListItem, Divider, Spinner } from '@chakra-ui/react';
 import { Search } from 'react-feather';
-import styled from 'styled-components';
 import { IUser } from 'Context';
+import styled from 'styled-components';
 
 interface ISearchResultProps {
   display: string;

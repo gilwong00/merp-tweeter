@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
-import { useToastNotification } from 'hooks';
+import React, { useState, useContext } from 'react';
 import { AppContext } from 'Context';
+import { useToastNotification } from 'hooks';
 import { useHistory } from 'react-router-dom';
-import { gql, useMutation } from '@apollo/client';
+import { COMMENT_TWEET } from 'graphql/mutations/comment';
+import { COMMENT_FRAGMENT } from 'graphql/fragments/comment';
+import { useMutation } from '@apollo/client';
 import { ApolloCache } from '@apollo/client/core';
 import { IComment } from 'Tweet';
 import {
@@ -35,19 +37,57 @@ const schema = joi.object({
 });
 
 interface IProps {
+  tweetId: String;
   comments: Array<IComment>;
 }
 
-const CommentButton: React.FC<IProps> = ({ comments }) => {
+const CommentButton: React.FC<IProps> = ({ tweetId, comments }) => {
+  const { user } = useContext(AppContext);
+  const history = useHistory();
   const { pushNotification } = useToastNotification();
   const [showCommentDialog, setShowCommentDialog] = useState<boolean>(false);
+  const [
+    comment,
+    { loading: commentLoading, error: commentError }
+  ] = useMutation(COMMENT_TWEET, {
+    update(cache: ApolloCache<any>, { data }): void {
+      if (commentError) return pushNotification('error', commentError.message);
+
+      const tweet = cache.readFragment<{
+        _id: string;
+        comments: Array<string>;
+      }>({
+        id: `Tweet:${tweetId}`,
+        fragment: COMMENT_FRAGMENT
+      });
+
+      const comments = [...(tweet?.comments ?? []), data.comment._id];
+
+      cache.writeFragment({
+        id: `Tweet:${tweetId}`,
+        fragment: COMMENT_FRAGMENT,
+        data: {
+          __typename: 'Tweet',
+          comments
+        }
+      });
+
+      pushNotification('success', 'Comment added');
+    }
+  });
 
   const { register, handleSubmit, errors, reset } = useForm<ICommentInputs>({
     resolver: joiResolver(schema)
   });
 
   const handleAddComment = async (data: ICommentInputs) => {
+    if (!user) return history.push('/login');
+
+    await comment({
+      variables: { comment: data.comment, tweetId, username: user.username }
+    });
     reset();
+    setShowCommentDialog(false);
   };
 
   const hasFormErrors =
@@ -57,6 +97,7 @@ const CommentButton: React.FC<IProps> = ({ comments }) => {
     <Box>
       <IconButton
         w={100}
+        isLoading={commentLoading}
         variant='outline'
         colorScheme='blue'
         aria-label='Like Tweet'

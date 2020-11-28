@@ -34,6 +34,14 @@ const typeDefs = gql`
     user: User!
   }
 
+  type Comment {
+    _id: ID!
+    comment: String!
+    username: String!
+    tweetId: String!
+    dateCreated: Date!
+  }
+
   type Query {
     tweets(offset: Int): [Tweet]
     getLoggedInUser: User
@@ -45,8 +53,9 @@ const typeDefs = gql`
     authUser(input: AuthInput): User!
     logout: Boolean!
     createTweet(input: TweetInput): Tweet!
-    like(input: LikeInput!): Like
-    unlike(input: UnlikeInput): Like
+    like(input: LikeInput!): Like!
+    unlike(input: UnlikeInput): Like!
+    comment(input: CommentInput): Comment!
   }
 
   # Inputs
@@ -75,6 +84,12 @@ const typeDefs = gql`
   input UnlikeInput {
     tweetId: ID!
     likeId: ID!
+  }
+
+  input CommentInput {
+    comment: String!
+    username: String!
+    tweetId: ID!
   }
 `;
 

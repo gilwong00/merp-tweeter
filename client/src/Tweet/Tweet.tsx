@@ -62,7 +62,7 @@ const Tweet: React.FC<IProps> = ({ tweet, user }) => {
       {/* might be able to make this a generic row component */}
       <Flex dir='row' justify='space-between'>
         <LikeButton user={user} likes={tweet.likes} tweetId={tweet._id} />
-        <CommentButton comments={tweet.comments ?? []} />
+        <CommentButton comments={tweet.comments ?? []} tweetId={tweet._id} />
       </Flex>
     </Box>
   );

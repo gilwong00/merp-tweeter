@@ -1,14 +1,14 @@
 import { model, Schema, Document } from 'mongoose';
 
 export interface IComment extends Document {
-  content: string;
+  comment: string;
   username: string;
   dateCreated: Date;
   tweetId: string;
 }
 
 const commentSchema = new Schema({
-  content: {
+  comment: {
     type: String,
     required: true
   },
@@ -22,7 +22,8 @@ const commentSchema = new Schema({
   },
   tweetId: {
     type: Schema.Types.ObjectId,
-    ref: 'Tweet'
+    ref: 'Tweet',
+    required: true
   }
 });
 
