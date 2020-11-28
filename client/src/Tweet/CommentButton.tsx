@@ -52,19 +52,20 @@ const CommentButton: React.FC<IProps> = ({ tweetId, comments }) => {
   ] = useMutation(COMMENT_TWEET, {
     update(cache: ApolloCache<any>, { data }): void {
       if (commentError) return pushNotification('error', commentError.message);
+      const id = `Tweet:${tweetId}`;
 
       const tweet = cache.readFragment<{
         _id: string;
         comments: Array<string>;
       }>({
-        id: `Tweet:${tweetId}`,
+        id,
         fragment: COMMENT_FRAGMENT
       });
 
       const comments = [...(tweet?.comments ?? []), data.comment._id];
 
       cache.writeFragment({
-        id: `Tweet:${tweetId}`,
+        id,
         fragment: COMMENT_FRAGMENT,
         data: {
           __typename: 'Tweet',

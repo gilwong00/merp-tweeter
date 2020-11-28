@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { gql, useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { ApolloCache } from '@apollo/client/core';
 import { LIKE_TWEET, UNLIKE_TWEET } from 'graphql/mutations/tweet';
+import { LIKES_FRAGMENT } from 'graphql/fragments/like';
 import { IUser } from 'Context';
 import { ILike } from '.';
 import { useToastNotification } from 'hooks';
@@ -27,18 +28,13 @@ const updateLikeCount = (
   data: ILikeUnlikeResult,
   action: LikeAction
 ): void => {
+  const id = `Tweet:${tweetId}`;
   const tweet = cache.readFragment<{
     _id: string;
     likes: Array<{ _id: string }>;
   }>({
-    id: 'Tweet:' + tweetId,
-    fragment: gql`
-      fragment currentLikes on Tweet {
-        likes {
-          _id
-        }
-      }
-    `
+    id,
+    fragment: LIKES_FRAGMENT
   });
 
   if (tweet) {
@@ -48,14 +44,8 @@ const updateLikeCount = (
         : [...tweet.likes.filter(like => like._id !== data.unlike?._id)];
 
     cache.writeFragment({
-      id: 'Tweet:' + tweetId,
-      fragment: gql`
-        fragment likes on Tweet {
-          likes {
-            _id
-          }
-        }
-      `,
+      id,
+      fragment: LIKES_FRAGMENT,
       data: {
         __typename: 'Tweet',
         likes

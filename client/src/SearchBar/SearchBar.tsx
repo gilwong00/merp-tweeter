@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLazyQuery } from '@apollo/client';
 import { SEARCH_TWEETS } from 'graphql/queries/tweet';
-import { Box, List, ListItem, Divider, Spinner } from '@chakra-ui/react';
+import { Box, List, ListItem, Spinner } from '@chakra-ui/react';
 import { Search } from 'react-feather';
 import { IUser } from 'Context';
 import styled from 'styled-components';
@@ -39,13 +39,28 @@ const SearchInput = styled.input`
   font-size: 18px;
 `;
 
-const SearchResults = styled(Box)<ISearchResultProps>`
+const SearchResultContainer = styled(Box)<ISearchResultProps>`
   display: ${(props: ISearchResultProps) => props.display};
   margin-top: 10px;
   padding: 10px;
   box-shadow: 0px 1px 5px 3px rgba(0, 0, 0, 0.12);
   z-index: 100;
   border-radius: 5px;
+`;
+
+const SearchResult = styled(ListItem)`
+  cursor: pointer;
+  padding: 5px;
+  border-bottom: 1px solid rgba(34, 36, 38, 0.1);
+  font-size: 18px;
+
+  &:hover {
+    background: #e6e3e3;
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
 `;
 
 const SearchBar = () => {
@@ -76,17 +91,21 @@ const SearchBar = () => {
         {loading ? <Spinner /> : <Search />}
       </SearchContainer>
 
-      <SearchResults display={isSearching ? 'block' : 'none'}>
-        <List spacing={5}>
-          {/* todo make cursor pointer, add bg color when hovering, make font size bigger */}
-          {data?.search.map((result: ISearchResult) => (
-            <ListItem key={result._id}>
-              {result.message} - @{result.user.username}
-              <Divider pt={1} />
-            </ListItem>
-          ))}
-        </List>
-      </SearchResults>
+      {!loading && (
+        <SearchResultContainer display={isSearching ? 'block' : 'none'}>
+          <List spacing={5}>
+            {data?.search.length > 0 ? (
+              data?.search.map((result: ISearchResult) => (
+                <SearchResult key={result._id}>
+                  {result.message} - @{result.user.username}
+                </SearchResult>
+              ))
+            ) : (
+              <ListItem>No Results</ListItem>
+            )}
+          </List>
+        </SearchResultContainer>
+      )}
     </Box>
   );
 };
