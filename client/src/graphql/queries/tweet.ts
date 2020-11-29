@@ -38,10 +38,12 @@ export const GET_TWEET = gql`
     getTweet(tweetId: $tweetId) {
       _id
       message
+      dateCreated
       comments {
         _id
         comment
         username
+        dateCreated
       }
       likes {
         _id

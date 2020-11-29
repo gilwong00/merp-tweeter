@@ -3,23 +3,49 @@ import { Box, Flex } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-interface SegmentProps {
+type stringOrNumber = string | number;
+
+type responsive = {
+  sm: string;
+  md: string;
+};
+
+interface ISegmentProps {
   children: React.ReactNode;
   minH?: number;
-  h?: string | number;
+  h?: stringOrNumber;
   align?: string;
-  w?: string | number;
-  m?: string | number;
+  w?: stringOrNumber | { sm: stringOrNumber; md: stringOrNumber };
+  m?: stringOrNumber;
 }
 
-export const Segment: React.FC<SegmentProps> = ({ children, ...rest }) => (
+interface IRowProps {
+  children: React.ReactNode;
+  justify?: string;
+  align?: string;
+}
+
+interface IColumnProps {
+  children: React.ReactNode;
+  justify?: string;
+  align?: responsive | string;
+  pt?: stringOrNumber;
+}
+
+export const Segment: React.FC<ISegmentProps> = ({ children, ...rest }) => (
   <Box borderWidth='1px' borderRadius='sm' overflow='hidden' p={5} {...rest}>
     {children}
   </Box>
 );
 
-export const Row = ({ children }: { children: React.ReactNode }) => (
-  <Flex dir='row' justify='space-between'>
+export const Row: React.FC<IRowProps> = ({ children, ...rest }) => (
+  <Flex direction='row' {...rest}>
+    {children}
+  </Flex>
+);
+
+export const Column: React.FC<IColumnProps> = ({ children, ...rest }) => (
+  <Flex direction='column' {...rest}>
     {children}
   </Flex>
 );

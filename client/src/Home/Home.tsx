@@ -5,7 +5,7 @@ import { ITweet, Tweet } from 'Tweet';
 import { SearchBar } from 'SearchBar';
 import { AppContext } from 'Context';
 import { useToastNotification } from 'hooks';
-import { SimpleGrid, GridItem, Box, Button, Flex } from '@chakra-ui/react';
+import { SimpleGrid, GridItem, Button, Flex } from '@chakra-ui/react';
 import { Segment } from 'UI';
 
 const Home = () => {

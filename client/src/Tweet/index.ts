@@ -5,7 +5,8 @@ export { default as CommentButton } from './CommentButton';
 export { default as TweetDetails } from './TweetDetails';
 
 export interface IComment {
-  content: string;
+  _id: string;
+  comment: string;
   username: string;
   dateCreated: Date;
   tweetId: string;

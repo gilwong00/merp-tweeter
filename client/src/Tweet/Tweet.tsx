@@ -2,34 +2,28 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { IUser } from 'Context';
 import { ITweet } from 'Tweet';
-import { Box, Flex, Avatar, Divider } from '@chakra-ui/react';
+import { DateDisplay } from 'DateDisplay';
+import { Box, Avatar, Divider } from '@chakra-ui/react';
 import { LikeButton, CommentButton } from '.';
-import { Row } from 'UI';
+import { Row, Segment } from 'UI';
 
 interface IProps {
   tweet: ITweet;
   user: IUser | null;
+  hideAvatar?: boolean;
+  width?: string | number;
 }
 
-const Tweet: React.FC<IProps> = ({ tweet, user }) => {
-  const dateOptions = { month: 'long', day: 'numeric', year: 'numeric' };
-  const timeOptions = {
-    hour: 'numeric',
-    minute: 'numeric',
-    second: 'numeric'
-  };
-  const date = new Date(tweet.dateCreated);
-  const displayDate = new Intl.DateTimeFormat('en-US', dateOptions).format(
-    date
-  );
-  const displayTime = new Intl.DateTimeFormat('en-US', timeOptions).format(
-    date
-  );
-
+const Tweet: React.FC<IProps> = ({
+  tweet,
+  user,
+  hideAvatar = false,
+  width
+}) => {
   return (
-    <Box borderWidth='1px' borderRadius='lg' overflow='hidden' p={5}>
+    <Segment w={{ sm: 250, md: width ?? 'auto' }}>
       <Link to={`/tweet/${tweet._id}`}>
-        <Row>
+        <Row justify='space-between'>
           <Box
             color='gray.500'
             fontWeight='semibold'
@@ -39,12 +33,10 @@ const Tweet: React.FC<IProps> = ({ tweet, user }) => {
             ml='2'
           >
             @{user?.username}
-            <div>
-              {displayDate} at {displayTime}
-            </div>
+            <DateDisplay dateCreated={tweet.dateCreated} />
           </Box>
 
-          <Avatar src='https://bit.ly/broken-link' />
+          {!hideAvatar && <Avatar src='https://bit.ly/broken-link' />}
         </Row>
 
         <Box
@@ -60,11 +52,11 @@ const Tweet: React.FC<IProps> = ({ tweet, user }) => {
         </Box>
       </Link>
       <Divider orientation='horizontal' mt={2} mb={2} />
-      <Row>
+      <Row justify='space-between'>
         <LikeButton user={user} likes={tweet.likes} tweetId={tweet._id} />
         <CommentButton comments={tweet.comments ?? []} tweetId={tweet._id} />
       </Row>
-    </Box>
+    </Segment>
   );
 };
 

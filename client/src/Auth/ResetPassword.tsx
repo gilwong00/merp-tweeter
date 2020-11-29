@@ -24,7 +24,11 @@ const ResetPassword = () => {
       if (validateEmailError)
         return pushNotification('error', validateEmailError.message);
 
-      if (validateEmailData?.validateEmail) setStep(2);
+      if (validateEmailData?.validateEmail) {
+        setStep(2);
+      } else {
+        pushNotification('error', `Email: ${email} does not exist`);
+      }
     }
   });
 

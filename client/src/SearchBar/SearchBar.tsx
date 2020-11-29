@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useLazyQuery } from '@apollo/client';
 import { SEARCH_TWEETS } from 'graphql/queries/tweet';
 import { Box, List, ListItem, Spinner } from '@chakra-ui/react';
@@ -66,6 +67,7 @@ const SearchResult = styled(ListItem)`
 const SearchBar = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [isSearching, setIsSearching] = useState<boolean>(false);
+  const history = useHistory();
   const [search, { loading, data }] = useLazyQuery(SEARCH_TWEETS, {
     variables: { searchTerm }
   });
@@ -96,7 +98,10 @@ const SearchBar = () => {
           <List spacing={5}>
             {data?.search.length > 0 ? (
               data?.search.map((result: ISearchResult) => (
-                <SearchResult key={result._id}>
+                <SearchResult
+                  key={result._id}
+                  onClick={() => history.push(`/tweet/${result._id}`)}
+                >
                   {result.message} - @{result.user.username}
                 </SearchResult>
               ))
