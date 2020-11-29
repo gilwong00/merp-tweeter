@@ -36,7 +36,8 @@ const startServer = async () => {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useCreateIndex: true,
-      useFindAndModify: false
+      useFindAndModify: false,
+      autoIndex: process.env.NODE_ENV !== 'production'
     })
     .catch(err =>
       console.log(colors.red(`Error connecting to mongo: ${err.message}`))

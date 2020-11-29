@@ -88,9 +88,10 @@ const NewTweet = () => {
         overflow='hidden'
         p={5}
         align='center'
+        w={{ sm: 250, md: 'auto' }}
       >
         <form onSubmit={handleSubmit(postTweet)}>
-          <FormControl w={600} isInvalid={hasFormErrors}>
+          <FormControl w={{ sm: 200, md: 600 }} isInvalid={hasFormErrors}>
             <Input
               type='text'
               name='message'

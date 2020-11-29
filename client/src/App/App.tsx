@@ -23,8 +23,8 @@ const App = () => {
             <Route path='/login' component={Login} />
             <Route path='/register' component={Register} />
             <Route path='/reset' component={ResetPassword} />
+            <ProtectedRoute exact path='/tweet/new' component={NewTweet} />
             <ProtectedRoute path='/tweet/:tweetId' component={TweetDetails} />
-            <ProtectedRoute path='/tweet/new' component={NewTweet} />
             <ProtectedRoute exact path='/' component={Home} />
           </Switch>
         </Container>

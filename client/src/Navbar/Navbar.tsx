@@ -5,11 +5,22 @@ import { LOGOUT } from 'graphql/mutations/user';
 import { useMutation, useApolloClient } from '@apollo/client';
 import { useCookie, useToastNotification } from 'hooks';
 import { AppContext } from 'Context';
-import { Flex, Button, Heading, Box } from '@chakra-ui/react';
+import {
+  Flex,
+  Button,
+  Heading,
+  Box,
+  Menu,
+  MenuButton,
+  MenuGroup,
+  MenuItem,
+  MenuList,
+  MenuDivider
+} from '@chakra-ui/react';
 import './Navbar.css';
 
 const Navbar = () => {
-  const { user } = useContext(AppContext);
+  const { user, loading } = useContext(AppContext);
   const history = useHistory();
   const { removeValue } = useCookie();
   const { pushNotification } = useToastNotification();
@@ -44,16 +55,26 @@ const Navbar = () => {
         </svg>
       </Box> */}
 
-      <Flex flex={1} ml='auto' align='center' justify='flex-end'>
+      <Flex ml='auto' align='center' justify='flex-end'>
         {user ? (
-          <Box d={{ sm: true ? 'block' : 'none', md: 'flex' }}>
-            <Button className='nav-btn' as={Link} to='/tweet/new' size='md'>
-              New Tweet
-            </Button>
-            <Button className='nav-btn' size='md' onClick={() => logout()}>
-              Logout
-            </Button>
-          </Box>
+          <Menu isLazy>
+            <MenuButton as={Button}>Hi @{user.username}</MenuButton>
+            <MenuList>
+              <MenuGroup title='Profile'>
+                <MenuItem as={Link} to='/pofile'>
+                  My Account
+                </MenuItem>
+                <MenuItem as={Link} to='/tweets'>
+                  My Tweets
+                </MenuItem>
+                <MenuItem as={Link} to='/tweet/new'>
+                  New Tweet
+                </MenuItem>
+              </MenuGroup>
+              <MenuDivider />
+              <MenuItem onClick={() => logout()}>Logout</MenuItem>
+            </MenuList>
+          </Menu>
         ) : (
           <Box d='flex'>
             <Button as={Link} to='/login' colorScheme='teal' size='md'>

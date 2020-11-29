@@ -74,9 +74,9 @@ const Login = () => {
 
   return (
     <Stack direction='column' spacing={2} align='center'>
-      <Segment align='center'>
+      <Segment align='center' w={{ sm: 300, md: 500 }}>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <FormControl w={600} isInvalid={isValid('username')}>
+          <FormControl w={{ sm: 200, md: 400 }} isInvalid={isValid('username')}>
             <FormLabel>Username</FormLabel>
             <Input
               type='text'
@@ -86,7 +86,7 @@ const Login = () => {
             />
             <FormErrorMessage>{errors.username?.message}</FormErrorMessage>
           </FormControl>
-          <FormControl w={600} isInvalid={isValid('password')}>
+          <FormControl w={{ sm: 200, md: 400 }} isInvalid={isValid('password')}>
             <FormLabel>Password</FormLabel>
             <Input
               type='password'
@@ -100,8 +100,13 @@ const Login = () => {
             <StyledLink to='/reset'>Forgot your password?</StyledLink>
           </ForgotPasswordSection>
 
-          <Flex justify='flex-end' mt={5}>
-            <Button isLoading={loading} type='submit'>
+          <Flex justify='center' mt={5}>
+            <Button
+              isLoading={loading}
+              type='submit'
+              w={{ sm: 200, md: 400 }}
+              isFullWidth
+            >
               Login
             </Button>
           </Flex>

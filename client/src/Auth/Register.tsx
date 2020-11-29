@@ -69,9 +69,9 @@ const Register = () => {
 
   return (
     <Stack direction='column' spacing={2} align='center'>
-      <Segment align='center'>
+      <Segment align='center' w={{ sm: 300, md: 500 }}>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <FormControl w={600} isInvalid={isValid('username')}>
+          <FormControl w={{ sm: 200, md: 400 }} isInvalid={isValid('username')}>
             <FormLabel>Username</FormLabel>
             <Input
               type='text'
@@ -80,7 +80,11 @@ const Register = () => {
             />
             <FormErrorMessage>{errors.username?.message}</FormErrorMessage>
           </FormControl>
-          <FormControl w={600} isInvalid={isValid('email')} mt={5}>
+          <FormControl
+            w={{ sm: 200, md: 400 }}
+            isInvalid={isValid('email')}
+            mt={5}
+          >
             <FormLabel>Email</FormLabel>
             <Input
               type='email'
@@ -89,7 +93,11 @@ const Register = () => {
             />
             <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
           </FormControl>
-          <FormControl w={600} isInvalid={isValid('password')} mt={5}>
+          <FormControl
+            w={{ sm: 200, md: 400 }}
+            isInvalid={isValid('password')}
+            mt={5}
+          >
             <FormLabel>Password</FormLabel>
             <Input
               type='password'
@@ -98,7 +106,11 @@ const Register = () => {
             />
             <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
           </FormControl>
-          <FormControl w={600} isInvalid={isValid('confirmedPassword')} mt={5}>
+          <FormControl
+            w={{ sm: 200, md: 400 }}
+            isInvalid={isValid('confirmedPassword')}
+            mt={5}
+          >
             <FormLabel>Confirm Password</FormLabel>
             <Input
               type='password'
@@ -109,9 +121,14 @@ const Register = () => {
               {errors.confirmedPassword?.message}
             </FormErrorMessage>
           </FormControl>
-          <Flex justify='flex-end' mt={5}>
-            <Button isLoading={loading} type='submit'>
-              Login
+          <Flex justify='center' mt={5}>
+            <Button
+              isLoading={loading}
+              type='submit'
+              isFullWidth
+              w={{ sm: 200, md: 400 }}
+            >
+              Register
             </Button>
           </Flex>
         </form>
