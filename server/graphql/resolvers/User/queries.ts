@@ -16,3 +16,13 @@ export const getLoggedInUser = async (_: any, {}: any, ctx: Context) => {
   const user = await User.findOne({ _id: userId });
   return user;
 };
+
+export const validateEmail = async (_: any, args: { email: string }) => {
+  try {
+    const user = await User.findOne({ email: args.email });
+
+    return user ? true : false;
+  } catch (err) {
+    throw err;
+  }
+};

@@ -103,7 +103,6 @@ const NewTweet = () => {
 
           <Button
             isLoading={loading}
-            colorScheme='teal'
             type='submit'
             variant='solid'
             size='lg'

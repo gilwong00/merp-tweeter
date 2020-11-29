@@ -4,6 +4,7 @@ import { IUser } from 'Context';
 import { ITweet } from 'Tweet';
 import { Box, Flex, Avatar, Divider } from '@chakra-ui/react';
 import { LikeButton, CommentButton } from '.';
+import { Row } from 'UI';
 
 interface IProps {
   tweet: ITweet;
@@ -28,7 +29,7 @@ const Tweet: React.FC<IProps> = ({ tweet, user }) => {
   return (
     <Box borderWidth='1px' borderRadius='lg' overflow='hidden' p={5}>
       <Link to={`/tweet/${tweet._id}`}>
-        <Flex dir='row' justify='space-between'>
+        <Row>
           <Box
             color='gray.500'
             fontWeight='semibold'
@@ -44,7 +45,7 @@ const Tweet: React.FC<IProps> = ({ tweet, user }) => {
           </Box>
 
           <Avatar src='https://bit.ly/broken-link' />
-        </Flex>
+        </Row>
 
         <Box
           mt='1'
@@ -59,11 +60,10 @@ const Tweet: React.FC<IProps> = ({ tweet, user }) => {
         </Box>
       </Link>
       <Divider orientation='horizontal' mt={2} mb={2} />
-      {/* might be able to make this a generic row component */}
-      <Flex dir='row' justify='space-between'>
+      <Row>
         <LikeButton user={user} likes={tweet.likes} tweetId={tweet._id} />
         <CommentButton comments={tweet.comments ?? []} tweetId={tweet._id} />
-      </Flex>
+      </Row>
     </Box>
   );
 };

@@ -6,6 +6,7 @@ import { SearchBar } from 'SearchBar';
 import { AppContext } from 'Context';
 import { useToastNotification } from 'hooks';
 import { SimpleGrid, GridItem, Box, Button, Flex } from '@chakra-ui/react';
+import { Segment } from 'UI';
 
 const Home = () => {
   const [offset, setOffset] = useState<number>(0);
@@ -19,14 +20,7 @@ const Home = () => {
   if (error) pushNotification('error', error.message);
 
   return (
-    <Box
-      borderWidth='1px'
-      borderRadius='sm'
-      overflow='hidden'
-      p={5}
-      minH={800}
-      h='auto'
-    >
+    <Segment minH={800} h='auto'>
       <SearchBar />
       <SimpleGrid columns={{ sm: 1, md: 2 }} spacingX='40px' spacingY='20px'>
         {data?.tweets.map((tweet: ITweet) => (
@@ -37,7 +31,6 @@ const Home = () => {
       </SimpleGrid>
       <Flex justify='center' pt={60}>
         <Button
-          colorScheme='teal'
           onClick={() => {
             fetchMore({
               variables: { offset: offset + 1 }
@@ -48,7 +41,7 @@ const Home = () => {
           Load More
         </Button>
       </Flex>
-    </Box>
+    </Segment>
   );
 };
 

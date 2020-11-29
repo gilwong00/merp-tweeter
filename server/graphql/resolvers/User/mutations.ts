@@ -85,3 +85,22 @@ export const logout = async (_: any, {}: IUserArgs, ctx: Context) => {
   req.cookies = {};
   return true;
 };
+
+export const changePassword = async (
+  _: any,
+  args: { newPassword: string; email: string }
+) => {
+  try {
+    const newPassword = hashPassword(args.newPassword);
+
+    const updatedUser = await User.findOneAndUpdate(
+      { email: args.email },
+      {
+        $set: { password: newPassword }
+      }
+    );
+    return updatedUser;
+  } catch (err) {
+    throw err;
+  }
+};

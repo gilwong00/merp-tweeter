@@ -47,42 +47,19 @@ const Navbar = () => {
       <Flex flex={1} ml='auto' align='center' justify='flex-end'>
         {user ? (
           <Box d={{ sm: true ? 'block' : 'none', md: 'flex' }}>
-            <Button
-              className='nav-btn'
-              as={Link}
-              to='/tweet/new'
-              colorScheme='teal'
-              size='md'
-            >
+            <Button className='nav-btn' as={Link} to='/tweet/new' size='md'>
               New Tweet
             </Button>
-            <Button
-              className='nav-btn'
-              colorScheme='teal'
-              size='md'
-              onClick={() => logout()}
-            >
+            <Button className='nav-btn' size='md' onClick={() => logout()}>
               Logout
             </Button>
           </Box>
         ) : (
           <Box d='flex'>
-            <Button
-              className='nav-btn'
-              as={Link}
-              to='/login'
-              colorScheme='teal'
-              size='md'
-            >
+            <Button as={Link} to='/login' colorScheme='teal' size='md'>
               Login
             </Button>
-            <Button
-              className='nav-btn'
-              as={Link}
-              to='/register'
-              colorScheme='teal'
-              size='md'
-            >
+            <Button className='nav-btn' as={Link} to='/register' size='md'>
               Register
             </Button>
           </Box>

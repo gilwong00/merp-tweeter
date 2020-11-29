@@ -11,10 +11,16 @@ export const WHO_AM_I = gql`
 `;
 
 export const GET_LOGGED_IN_USER = gql`
-  query {
+  query getLoggedInUser {
     getLoggedInUser {
       ...UserFields
     }
   }
   ${USER_FIELDS}
+`;
+
+export const VALIDATE_EMAIL = gql`
+  query validate($email: String!) {
+    validateEmail(email: $email)
+  }
 `;

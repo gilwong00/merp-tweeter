@@ -13,10 +13,15 @@ import {
   FormErrorMessage,
   Input,
   Stack,
-  Box,
   Button,
   Flex
 } from '@chakra-ui/react';
+import { Segment, StyledLink } from 'UI';
+import styled from 'styled-components';
+
+const ForgotPasswordSection = styled.div`
+  margin-top: 10px;
+`;
 
 interface IFormInputs {
   username: string;
@@ -69,13 +74,7 @@ const Login = () => {
 
   return (
     <Stack direction='column' spacing={2} align='center'>
-      <Box
-        borderWidth='1px'
-        borderRadius='sm'
-        overflow='hidden'
-        p={5}
-        align='center'
-      >
+      <Segment align='center'>
         <form onSubmit={handleSubmit(onSubmit)}>
           <FormControl w={600} isInvalid={isValid('username')}>
             <FormLabel>Username</FormLabel>
@@ -96,13 +95,18 @@ const Login = () => {
             />
             <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
           </FormControl>
+
+          <ForgotPasswordSection>
+            <StyledLink to='/reset'>Forgot your password?</StyledLink>
+          </ForgotPasswordSection>
+
           <Flex justify='flex-end' mt={5}>
-            <Button isLoading={loading} colorScheme='teal' type='submit'>
+            <Button isLoading={loading} type='submit'>
               Login
             </Button>
           </Flex>
         </form>
-      </Box>
+      </Segment>
     </Stack>
   );
 };

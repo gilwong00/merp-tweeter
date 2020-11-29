@@ -12,10 +12,10 @@ import {
   FormErrorMessage,
   Input,
   Stack,
-  Box,
   Button,
   Flex
 } from '@chakra-ui/react';
+import { Segment } from 'UI';
 
 interface IFormInputs {
   username: string;
@@ -69,13 +69,7 @@ const Register = () => {
 
   return (
     <Stack direction='column' spacing={2} align='center'>
-      <Box
-        borderWidth='1px'
-        borderRadius='sm'
-        overflow='hidden'
-        p={5}
-        align='center'
-      >
+      <Segment align='center'>
         <form onSubmit={handleSubmit(onSubmit)}>
           <FormControl w={600} isInvalid={isValid('username')}>
             <FormLabel>Username</FormLabel>
@@ -116,12 +110,12 @@ const Register = () => {
             </FormErrorMessage>
           </FormControl>
           <Flex justify='flex-end' mt={5}>
-            <Button isLoading={loading} colorScheme='teal' type='submit'>
+            <Button isLoading={loading} type='submit'>
               Login
             </Button>
           </Flex>
         </form>
-      </Box>
+      </Segment>
     </Stack>
   );
 };

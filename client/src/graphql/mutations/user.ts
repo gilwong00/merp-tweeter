@@ -32,3 +32,11 @@ export const LOGOUT = gql`
     logout
   }
 `;
+
+export const CHANGE_PASSWORD = gql`
+  mutation changePassword($email: String!, $newPassword: String!) {
+    changePassword(email: $email, newPassword: $newPassword) {
+      _id
+    }
+  }
+`;

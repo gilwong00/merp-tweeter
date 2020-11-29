@@ -134,7 +134,7 @@ const CommentButton: React.FC<IProps> = ({ tweetId, comments }) => {
               </FormControl>
             </ModalBody>
             <ModalFooter>
-              <Button type='submit' colorScheme='teal' mr={3}>
+              <Button type='submit' mr={3}>
                 Comment
               </Button>
               <Button colorScheme='red'>Cancel</Button>
