@@ -7,14 +7,22 @@ export const getLoggedInUser = authenticated(
     const { userId } = ctx.req;
 
     if (!userId) return null;
-    const user = await User.findOne({ _id: userId });
+    const user = (await User.findOne({ _id: userId }))?.toObject();
 
     if (user) {
       const totalTweets = await Tweet.count({
         user: user._id
       });
 
-      return { ...user.toObject(), totalTweets };
+      return {
+        _id: user._id,
+        username: user.username,
+        email: user.email,
+        dateCreated: user.dateCreated,
+        following: (user.following ?? []).length,
+        followers: (user.followers ?? []).length,
+        totalTweets
+      };
     } else {
       return new Error('Could not find active user');
     }

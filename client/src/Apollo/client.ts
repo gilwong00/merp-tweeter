@@ -1,10 +1,15 @@
-import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
+import { ApolloClient, NormalizedCacheObject, HttpLink } from '@apollo/client';
+
 import { cache } from '.';
+
+const httpLink = new HttpLink({
+  uri: 'http://localhost:5000/graphql',
+  credentials: 'include'
+});
 
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache,
-  uri: 'http://localhost:5000/graphql',
-  credentials: 'include',
+  link: httpLink,
   connectToDevTools: true
 });
 

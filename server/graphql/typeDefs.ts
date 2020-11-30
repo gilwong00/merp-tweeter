@@ -10,9 +10,9 @@ const typeDefs = gql`
     password: String!
     dateCreated: Date!
     token: String
-    following: [ID]
-    followers: [ID]
-    totalTweets: Int
+    following: Int!
+    followers: Int!
+    totalTweets: Int!
   }
 
   type Like {

@@ -1,6 +1,7 @@
 import 'dotenv-safe/config';
 import { ApolloServer } from 'apollo-server-express';
 import express from 'express';
+import http from 'http';
 import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 import cookieSession from 'cookie-session';
@@ -58,11 +59,15 @@ const startServer = async () => {
     path: '/graphql'
   });
 
-  app.listen({ port: PORT }, (): void =>
+  // this is required for subscriptions if we are using the express middleware
+  const httpServer = http.createServer(app);
+  server.installSubscriptionHandlers(httpServer);
+
+  httpServer.listen({ port: PORT }, (): void => {
     console.log(
       `\n🚀  GraphQL is now running on http://localhost:${PORT}/graphql`
-    )
-  );
+    );
+  });
 };
 
 startServer().catch(err =>
