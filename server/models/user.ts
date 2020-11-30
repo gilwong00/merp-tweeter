@@ -7,8 +7,6 @@ export interface IUser extends Document {
   dateCreated: Date;
 }
 
-// add followers and following
-
 const userSchema = new Schema({
   username: {
     type: String,
@@ -27,6 +25,14 @@ const userSchema = new Schema({
   dateCreated: {
     type: Date,
     default: new Date().toISOString()
+  },
+  followers: {
+    type: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+    default: []
+  },
+  following: {
+    type: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+    default: []
   }
 });
 

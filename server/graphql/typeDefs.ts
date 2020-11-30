@@ -10,6 +10,9 @@ const typeDefs = gql`
     password: String!
     dateCreated: Date!
     token: String
+    following: [ID]
+    followers: [ID]
+    totalTweets: Int
   }
 
   type Like {
@@ -59,6 +62,7 @@ const typeDefs = gql`
     unlike(input: UnlikeInput): Like!
     comment(input: CommentInput): Comment!
     changePassword(newPassword: String!, email: String!): User!
+    followOrUnfollow(userId: ID!, actionType: String!): User!
   }
 
   # Inputs

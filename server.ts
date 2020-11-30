@@ -27,7 +27,7 @@ const startServer = async () => {
       name: 'session',
       keys: ['secret key'],
       httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000 // 24 hours
+      maxAge: 4 * 60 * 60 * 1000 // 4 hours
     })
   );
 

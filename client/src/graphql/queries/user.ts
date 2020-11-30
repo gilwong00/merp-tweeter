@@ -14,6 +14,9 @@ export const GET_LOGGED_IN_USER = gql`
   query getLoggedInUser {
     getLoggedInUser {
       ...UserFields
+      following
+      followers
+      totalTweets
     }
   }
   ${USER_FIELDS}

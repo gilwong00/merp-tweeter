@@ -3,6 +3,7 @@ import { Context } from '../../../types/context';
 import { AuthenticationError } from 'apollo-server-express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import authenticated from '../../../middleware/isAuth';
 
 interface IUserArgs {
   input: {
@@ -104,3 +105,26 @@ export const changePassword = async (
     throw err;
   }
 };
+
+export const followOrUnfollow = authenticated(
+  async (
+    _: any,
+    args: { userId: string; actionType: 'follow' | 'unfollow' },
+    ctx: Context
+  ) => {
+    try {
+      const { userId } = ctx.req;
+      const query =
+        args.actionType === 'follow'
+          ? { $push: { following: args.userId } }
+          : { $pull: { following: args.userId } };
+
+      const user = await User.findOneAndUpdate({ _id: userId }, query, {
+        new: true
+      });
+      return user;
+    } catch (err) {
+      throw err;
+    }
+  }
+);
