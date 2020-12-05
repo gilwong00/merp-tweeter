@@ -41,7 +41,9 @@ const NewTweet = () => {
                     _id
                     message
                     dateCreated
-                    comments
+                    comments {
+                      _id
+                    }
                     likes {
                       _id
                       username

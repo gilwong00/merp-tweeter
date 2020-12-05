@@ -1,7 +1,7 @@
 import { Tweet } from '../../../models';
 import authenticated from '../../../middleware/isAuth';
 
-const LIMIT = 5;
+const LIMIT = 6;
 
 export const tweets = authenticated(
   async (_: any, args: { offset: number }) => {

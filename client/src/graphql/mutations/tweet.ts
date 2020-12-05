@@ -8,7 +8,9 @@ export const CREATE_TWEET = gql`
       _id
       message
       dateCreated
-      comments
+      comments {
+        _id
+      }
       likes {
         _id
       }

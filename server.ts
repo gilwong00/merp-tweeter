@@ -1,5 +1,5 @@
 import 'dotenv-safe/config';
-import { ApolloServer } from 'apollo-server-express';
+import { ApolloServer, PubSub } from 'apollo-server-express';
 import express from 'express';
 import http from 'http';
 import mongoose from 'mongoose';
@@ -10,6 +10,7 @@ import colors from 'colors';
 import schema from './server/graphql/schema';
 
 const PORT = process.env.port || 5000;
+const pubsub = new PubSub();
 
 const startServer = async () => {
   const app = express();
@@ -49,7 +50,8 @@ const startServer = async () => {
     playground: true,
     context: ({ req, res }) => ({
       req,
-      res
+      res,
+      pubsub
     })
   });
 

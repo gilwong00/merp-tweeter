@@ -15,5 +15,6 @@ const cache: InMemoryCache = new InMemoryCache({
     }
   }
 });
+//.restore({ Query: { fields: { tweets: [] } } });
 
 export default cache;

@@ -26,10 +26,12 @@ const tweetSchema = new Schema({
     default: new Date().toISOString()
   },
   comments: {
-    type: [{ type: Schema.Types.ObjectId, ref: 'Comment' }]
+    type: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],
+    default: []
   },
   likes: {
-    type: [{ type: Schema.Types.ObjectId, ref: 'Like' }]
+    type: [{ type: Schema.Types.ObjectId, ref: 'Like' }],
+    default: []
   },
   user: {
     type: Schema.Types.ObjectId,
