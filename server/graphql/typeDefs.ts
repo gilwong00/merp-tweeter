@@ -51,7 +51,8 @@ const typeDefs = gql`
     search(searchTerm: String!): [SearchResult]
     getTweet(tweetId: ID!): Tweet!
     validateEmail(email: String!): Boolean!
-    fetchUser(username: String!): User
+    fetchUser(username: String!): User!
+    getFollowers(userId: ID!): [ID]
   }
 
   type Mutation {
@@ -64,10 +65,6 @@ const typeDefs = gql`
     comment(input: CommentInput): Comment!
     changePassword(newPassword: String!, email: String!): User!
     followOrUnfollow(userId: ID!, actionType: String!): ID
-  }
-
-  type Subscription {
-    followUnfollow: String
   }
 
   # Inputs

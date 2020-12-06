@@ -45,15 +45,26 @@ export const validateEmail = async (_: any, args: { email: string }) => {
   }
 };
 
-export const fetchUser = async (_: any, args: { username: string }) => {
-  try {
-    const user = (await findUserByName(args.username))?.toObject();
+export const fetchUser = authenticated(
+  async (_: any, args: { username: string }) => {
+    try {
+      const user = (await findUserByName(args.username))?.toObject();
 
-    if (user) {
-      return await createUserPayload(user);
-    } else {
-      return new Error('Could not find active user');
+      if (user) {
+        return await createUserPayload(user);
+      } else {
+        return new Error('Could not find active user');
+      }
+    } catch (err) {
+      throw err;
     }
+  }
+);
+
+export const getFollowers = async (_: any, args: { userId: string }) => {
+  try {
+    const user = await User.findOne({ _id: args.userId });
+    return user?.followers ?? [];
   } catch (err) {
     throw err;
   }
