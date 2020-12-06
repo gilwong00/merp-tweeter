@@ -1,7 +1,6 @@
 import 'dotenv-safe/config';
-import { ApolloServer, PubSub } from 'apollo-server-express';
+import { ApolloServer } from 'apollo-server-express';
 import express from 'express';
-import http from 'http';
 import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 import cookieSession from 'cookie-session';
@@ -10,7 +9,6 @@ import colors from 'colors';
 import schema from './server/graphql/schema';
 
 const PORT = process.env.port || 5000;
-const pubsub = new PubSub();
 
 const startServer = async () => {
   const app = express();
@@ -18,7 +16,7 @@ const startServer = async () => {
     cors({
       credentials: true,
       origin:
-        process.env.NODE_ENV === 'Production'
+        process.env.NODE_ENV === 'production'
           ? 'prod url'
           : 'http://localhost:3000'
     })
@@ -50,8 +48,7 @@ const startServer = async () => {
     playground: true,
     context: ({ req, res }) => ({
       req,
-      res,
-      pubsub
+      res
     })
   });
 
@@ -61,11 +58,7 @@ const startServer = async () => {
     path: '/graphql'
   });
 
-  // this is required for subscriptions if we are using the express middleware
-  const httpServer = http.createServer(app);
-  server.installSubscriptionHandlers(httpServer);
-
-  httpServer.listen({ port: PORT }, (): void => {
+  app.listen({ port: PORT }, (): void => {
     console.log(
       `\n🚀  GraphQL is now running on http://localhost:${PORT}/graphql`
     );

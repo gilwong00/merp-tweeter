@@ -43,8 +43,6 @@ export const CHANGE_PASSWORD = gql`
 
 export const FOLLOW_OR_UNFOLLOW = gql`
   mutation followUnfollow($userId: ID!, $actionType: String!) {
-    followOrUnfollow(userId: $userId, actionType: $actionType) {
-      _id
-    }
+    followOrUnfollow(userId: $userId, actionType: $actionType)
   }
 `;

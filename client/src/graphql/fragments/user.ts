@@ -12,6 +12,6 @@ export const USER_FIELDS = gql`
 export const FOLLOWING_FRAGMENT = gql`
   fragment UserFollowing on User {
     _id
-    followinbg
+    following
   }
 `;

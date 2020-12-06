@@ -1,8 +1,8 @@
 import { Context } from 'types/context';
 import { User, Tweet } from '../../../models';
-import authenticated from '../../../middleware/isAuth';
 import { findUserByName } from './utils';
 import { IUser } from 'models/user';
+import authenticated from '../../../middleware/isAuth';
 
 const createUserPayload = async (user: IUser) => {
   const totalTweets = await Tweet.count({

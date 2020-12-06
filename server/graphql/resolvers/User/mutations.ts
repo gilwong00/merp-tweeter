@@ -1,10 +1,10 @@
 import { User } from '../../../models';
 import { Context } from '../../../types/context';
 import { AuthenticationError } from 'apollo-server-express';
+import { findUserByName } from './utils';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import authenticated from '../../../middleware/isAuth';
-import { findUserByName } from './utils';
 
 interface IUserArgs {
   input: {
@@ -121,10 +121,7 @@ export const followOrUnfollow = authenticated(
         new: true
       });
 
-      // pubsub.publish(args.actionType === 'follow' ? 'FOLLOW' : 'UNFOLLOW', {
-      //   action: args.actionType
-      // });
-      return user;
+      return user?._id;
     } catch (err) {
       throw err;
     }
