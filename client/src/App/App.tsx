@@ -24,7 +24,10 @@ const App = () => {
             <Route path='/login' component={Login} />
             <Route path='/register' component={Register} />
             <Route path='/reset' component={ResetPassword} />
-            <ProtectedRoute path='/profile' component={Profile} />
+            <ProtectedRoute
+              path={['/profile/:username', '/profile']}
+              component={Profile}
+            />
             <ProtectedRoute exact path='/tweet/new' component={NewTweet} />
             <ProtectedRoute path='/tweet/:tweetId' component={TweetDetails} />
             <ProtectedRoute exact path='/' component={Home} />

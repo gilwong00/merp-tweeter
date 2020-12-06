@@ -23,6 +23,7 @@ interface IRowProps {
   children: React.ReactNode;
   justify?: string;
   align?: string;
+  p?: number;
 }
 
 interface IColumnProps {
@@ -54,4 +55,10 @@ export const StyledLink = styled(Link)`
   cursor: pointer;
   color: blue;
   text-decoration: underline;
+`;
+
+export const ProfileLink = styled(Link)`
+  &:hover {
+    color: blue;
+  }
 `;

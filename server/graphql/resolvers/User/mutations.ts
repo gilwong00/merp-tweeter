@@ -1,11 +1,10 @@
 import { User } from '../../../models';
 import { Context } from '../../../types/context';
-import { AuthenticationError, PubSub } from 'apollo-server-express';
+import { AuthenticationError } from 'apollo-server-express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import authenticated from '../../../middleware/isAuth';
-
-const pubsub = new PubSub();
+import { findUserByName } from './utils';
 
 interface IUserArgs {
   input: {
@@ -23,9 +22,6 @@ const hashPassword = (password: string): string => {
     throw new Error('Password is null or empty');
   }
 };
-
-const findUserByName = async (username: string) =>
-  await User.findOne({ username });
 
 export const registerUser = async (_: any, args: IUserArgs) => {
   try {
@@ -125,9 +121,9 @@ export const followOrUnfollow = authenticated(
         new: true
       });
 
-      pubsub.publish(args.actionType === 'follow' ? 'FOLLOW' : 'UNFOLLOW', {
-        action: args.actionType
-      });
+      // pubsub.publish(args.actionType === 'follow' ? 'FOLLOW' : 'UNFOLLOW', {
+      //   action: args.actionType
+      // });
       return user;
     } catch (err) {
       throw err;

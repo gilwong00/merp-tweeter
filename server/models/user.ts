@@ -5,6 +5,8 @@ export interface IUser extends Document {
   email: string;
   password: string;
   dateCreated: Date;
+  followers: Array<string>;
+  following: Array<string>;
 }
 
 const userSchema = new Schema({

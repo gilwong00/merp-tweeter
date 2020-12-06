@@ -8,3 +8,10 @@ export const USER_FIELDS = gql`
     token
   }
 `;
+
+export const FOLLOWING_FRAGMENT = gql`
+  fragment UserFollowing on User {
+    _id
+    followinbg
+  }
+`;

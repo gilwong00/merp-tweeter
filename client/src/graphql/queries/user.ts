@@ -27,3 +27,15 @@ export const VALIDATE_EMAIL = gql`
     validateEmail(email: $email)
   }
 `;
+
+export const FETCH_USER = gql`
+  query getUser($username: String!) {
+    fetchUser(username: $username) {
+      ...UserFields
+      following
+      followers
+      totalTweets
+    }
+  }
+  ${USER_FIELDS}
+`;

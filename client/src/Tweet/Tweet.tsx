@@ -5,7 +5,7 @@ import { ITweet } from 'Tweet';
 import { DateDisplay } from 'DateDisplay';
 import { Box, Avatar, Divider } from '@chakra-ui/react';
 import { LikeButton, CommentButton } from '.';
-import { Row, Segment } from 'UI';
+import { ProfileLink, Row, Segment } from 'UI';
 
 interface IProps {
   tweet: ITweet;
@@ -22,23 +22,24 @@ const Tweet: React.FC<IProps> = ({
 }) => {
   return (
     <Segment w={{ sm: 250, md: width ?? 'auto' }}>
-      <Link to={`/tweet/${tweet._id}`}>
-        <Row justify='space-between'>
-          <Box
-            color='gray.500'
-            fontWeight='semibold'
-            letterSpacing='wide'
-            fontSize='md'
-            textTransform='uppercase'
-            ml='2'
-          >
+      <Row justify='space-between'>
+        <Box
+          color='gray.500'
+          fontWeight='semibold'
+          letterSpacing='wide'
+          fontSize='md'
+          textTransform='uppercase'
+          ml='2'
+        >
+          <ProfileLink to={`/profile/${user?.username}`}>
             @{user?.username}
-            <DateDisplay dateCreated={tweet.dateCreated} />
-          </Box>
+          </ProfileLink>
+          <DateDisplay dateCreated={tweet.dateCreated} />
+        </Box>
 
-          {!hideAvatar && <Avatar src='https://bit.ly/broken-link' />}
-        </Row>
-
+        {!hideAvatar && <Avatar src='https://bit.ly/broken-link' />}
+      </Row>
+      <Link to={`/tweet/${tweet._id}`}>
         <Box
           mt='1'
           ml='2'
@@ -50,12 +51,12 @@ const Tweet: React.FC<IProps> = ({
         >
           {tweet.message}
         </Box>
+        <Divider orientation='horizontal' mt={2} mb={2} />
+        <Row justify='space-between'>
+          <LikeButton user={user} likes={tweet.likes} tweetId={tweet._id} />
+          <CommentButton comments={tweet.comments ?? []} tweetId={tweet._id} />
+        </Row>
       </Link>
-      <Divider orientation='horizontal' mt={2} mb={2} />
-      <Row justify='space-between'>
-        <LikeButton user={user} likes={tweet.likes} tweetId={tweet._id} />
-        <CommentButton comments={tweet.comments ?? []} tweetId={tweet._id} />
-      </Row>
     </Segment>
   );
 };

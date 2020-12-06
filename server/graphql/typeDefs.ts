@@ -51,6 +51,7 @@ const typeDefs = gql`
     search(searchTerm: String!): [SearchResult]
     getTweet(tweetId: ID!): Tweet!
     validateEmail(email: String!): Boolean!
+    fetchUser(username: String!): User
   }
 
   type Mutation {
