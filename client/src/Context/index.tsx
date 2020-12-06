@@ -7,6 +7,9 @@ export interface IUser {
   username: string;
   email: string;
   token?: string;
+  followers?: number;
+  following: number;
+  totalTweets?: number;
 }
 interface IAppContext {
   user: IUser | null;

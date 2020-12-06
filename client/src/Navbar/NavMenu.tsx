@@ -42,7 +42,7 @@ const NavMenu: React.FC<IProps> = ({ user, logout }) => {
               {user ? (
                 <MenuList>
                   <MenuGroup title='Profile'>
-                    <MenuItem as={Link} to='/pofile'>
+                    <MenuItem as={Link} to='/profile'>
                       My Account
                     </MenuItem>
                     <MenuItem as={Link} to='/tweets'>
