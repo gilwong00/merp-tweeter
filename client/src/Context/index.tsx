@@ -7,7 +7,7 @@ export interface IUser {
   username: string;
   email: string;
   token?: string;
-  followers?: number;
+  followers?: Array<string>;
   following: number;
   totalTweets?: number;
 }

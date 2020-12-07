@@ -11,7 +11,7 @@ const typeDefs = gql`
     dateCreated: Date!
     token: String
     following: Int!
-    followers: Int!
+    followers: [ID]
     totalTweets: Int
   }
 

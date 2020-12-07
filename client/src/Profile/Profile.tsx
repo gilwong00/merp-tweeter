@@ -17,11 +17,7 @@ import {
   Button,
   Divider
 } from '@chakra-ui/react';
-import {
-  FETCH_USER,
-  GET_FOLLOWERS,
-  GET_LOGGED_IN_USER
-} from 'graphql/queries/user';
+import { FETCH_USER, GET_LOGGED_IN_USER } from 'graphql/queries/user';
 import { FOLLOW_OR_UNFOLLOW } from 'graphql/mutations/user';
 import { FOLLOWING_FRAGMENT } from 'graphql/fragments/user';
 import { IUser } from 'Context';
@@ -66,11 +62,6 @@ const Profile: React.FC = () => {
     ? fetchUserData.fetchUser
     : loggedInUser?.getLoggedInUser;
 
-  const [getFollowers, { data: getFollowersData }] = useLazyQuery(
-    GET_FOLLOWERS,
-    { variables: { userId: fetchUserData?.fetchUser._id } }
-  );
-
   const [
     followOrUnfollow,
     { loading: followUnFollowLoading, error: followUnFollowError }
@@ -99,8 +90,8 @@ const Profile: React.FC = () => {
     },
     refetchQueries: [
       {
-        query: GET_FOLLOWERS,
-        variables: { userId: fetchUserData?.fetchUser._id }
+        query: FETCH_USER,
+        variables: { username }
       }
     ]
   });
@@ -112,17 +103,13 @@ const Profile: React.FC = () => {
   }, [username, fetchUser, loggedInUser]);
 
   useEffect(() => {
-    if (userDetails && userDetails._id) getFollowers();
-  }, [getFollowers, userDetails]);
-
-  useEffect(() => {
-    if (getFollowersData?.getFollowers) {
-      const following = getFollowersData?.getFollowers.some(
+    if (userDetails && userDetails?.followers) {
+      const following = userDetails?.followers.some(
         (follower: string) => follower === loggedInUser?.getLoggedInUser._id
       );
       setIsFollowing(following);
     }
-  }, [getFollowersData, loggedInUser]);
+  }, [userDetails, loggedInUser]);
 
   if (fetchUserError) pushNotification('error', fetchUserError.message);
 
@@ -163,7 +150,7 @@ const Profile: React.FC = () => {
       <Section>
         <Stat>
           <StatLabel>Followers</StatLabel>
-          <StatNumber>{getFollowersData?.getFollowers.length}</StatNumber>
+          <StatNumber>{userDetails?.followers?.length}</StatNumber>
         </Stat>
         <Stat>
           <StatLabel>Following</StatLabel>

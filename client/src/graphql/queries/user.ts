@@ -39,9 +39,3 @@ export const FETCH_USER = gql`
   }
   ${USER_FIELDS}
 `;
-
-export const GET_FOLLOWERS = gql`
-  query getFollowers($userId: ID!) {
-    getFollowers(userId: $userId)
-  }
-`;

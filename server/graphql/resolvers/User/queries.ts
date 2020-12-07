@@ -15,7 +15,7 @@ const createUserPayload = async (user: IUser) => {
     email: user.email,
     dateCreated: user.dateCreated,
     following: (user.following ?? []).length,
-    followers: (user.followers ?? []).length,
+    followers: user.followers ?? [],
     totalTweets
   };
 };

@@ -10,9 +10,12 @@ const cache: InMemoryCache = new InMemoryCache({
           merge(existing, incoming) {
             return [...(existing ?? []), ...incoming];
           }
-        },
-        getFollowers: {
-          keyArgs: false,
+        }
+      }
+    },
+    User: {
+      fields: {
+        followers: {
           merge(_, incoming) {
             return incoming;
           }
