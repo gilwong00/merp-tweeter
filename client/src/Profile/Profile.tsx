@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Loading } from 'Loading';
 import { Column, Segment } from 'UI';
 import { useParams } from 'react-router-dom';
@@ -17,7 +17,11 @@ import {
   Button,
   Divider
 } from '@chakra-ui/react';
-import { FETCH_USER, GET_LOGGED_IN_USER } from 'graphql/queries/user';
+import {
+  FETCH_USER,
+  GET_FOLLOWERS,
+  GET_LOGGED_IN_USER
+} from 'graphql/queries/user';
 import { FOLLOW_OR_UNFOLLOW } from 'graphql/mutations/user';
 import { FOLLOWING_FRAGMENT } from 'graphql/fragments/user';
 import { IUser } from 'Context';
@@ -38,9 +42,11 @@ const Section = styled.div`
 `;
 
 const Profile: React.FC = () => {
+  const [isFollowing, setIsFollowing] = useState<boolean>(false);
   const { username } = useParams<{ username: string | undefined }>();
   const { pushNotification } = useToastNotification();
   const client = useApolloClient();
+
   const loggedInUser: {
     getLoggedInUser: IUser;
   } | null = client.cache.readQuery<{
@@ -56,6 +62,15 @@ const Profile: React.FC = () => {
     variables: { username }
   });
 
+  const userDetails: IUser = fetchUserData
+    ? fetchUserData.fetchUser
+    : loggedInUser?.getLoggedInUser;
+
+  const [getFollowers, { data: getFollowersData }] = useLazyQuery(
+    GET_FOLLOWERS,
+    { variables: { userId: fetchUserData?.fetchUser._id } }
+  );
+
   const [
     followOrUnfollow,
     { loading: followUnFollowLoading, error: followUnFollowError }
@@ -69,7 +84,7 @@ const Profile: React.FC = () => {
       const user = cache.readFragment<{ _id: string; following: number }>({
         id,
         fragment: FOLLOWING_FRAGMENT
-      });
+      }) as { _id: string; following: number };
 
       if (user) {
         cache.writeFragment({
@@ -77,11 +92,17 @@ const Profile: React.FC = () => {
           fragment: FOLLOWING_FRAGMENT,
           data: {
             __typename: 'User',
-            following: user.following + 1
+            following: isFollowing ? user.following - 1 : user.following + 1
           }
         });
       }
-    }
+    },
+    refetchQueries: [
+      {
+        query: GET_FOLLOWERS,
+        variables: { userId: fetchUserData?.fetchUser._id }
+      }
+    ]
   });
 
   useEffect(() => {
@@ -90,13 +111,22 @@ const Profile: React.FC = () => {
     }
   }, [username, fetchUser, loggedInUser]);
 
+  useEffect(() => {
+    if (userDetails && userDetails._id) getFollowers();
+  }, [getFollowers, userDetails]);
+
+  useEffect(() => {
+    if (getFollowersData?.getFollowers) {
+      const following = getFollowersData?.getFollowers.some(
+        (follower: string) => follower === loggedInUser?.getLoggedInUser._id
+      );
+      setIsFollowing(following);
+    }
+  }, [getFollowersData, loggedInUser]);
+
   if (fetchUserError) pushNotification('error', fetchUserError.message);
 
   if (fetchUserLoading) return <Loading />;
-
-  const userDetails = fetchUserData
-    ? fetchUserData.fetchUser
-    : loggedInUser?.getLoggedInUser;
 
   return (
     <Segment align='center' w={{ sm: 290, md: 600 }} m='auto'>
@@ -118,11 +148,14 @@ const Profile: React.FC = () => {
             isLoading={followUnFollowLoading}
             onClick={async () =>
               await followOrUnfollow({
-                variables: { userId: userDetails._id, actionType: 'follow' }
+                variables: {
+                  userId: userDetails._id,
+                  actionType: !isFollowing ? 'follow' : 'unfollow'
+                }
               })
             }
           >
-            <UserPlus />
+            {isFollowing ? <UserCheck /> : <UserPlus />}
           </Button>
         )}
       </Section>
@@ -130,7 +163,7 @@ const Profile: React.FC = () => {
       <Section>
         <Stat>
           <StatLabel>Followers</StatLabel>
-          <StatNumber>{userDetails.followers}</StatNumber>
+          <StatNumber>{getFollowersData?.getFollowers.length}</StatNumber>
         </Stat>
         <Stat>
           <StatLabel>Following</StatLabel>

@@ -4,7 +4,7 @@ import { AuthenticationError } from 'apollo-server-express';
 import { findUserByName } from './utils';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-// import authenticated from '../../../middleware/isAuth';
+import authenticated from '../../../middleware/isAuth';
 
 interface IUserArgs {
   input: {
@@ -104,38 +104,40 @@ export const changePassword = async (
   }
 };
 
-export const followOrUnfollow = async (
-  _: any,
-  args: { userId: string; actionType: 'follow' | 'unfollow' },
-  ctx: Context
-) => {
-  try {
-    const { userId } = ctx.req;
+export const followOrUnfollow = authenticated(
+  async (
+    _: any,
+    args: { userId: string; actionType: 'follow' | 'unfollow' },
+    ctx: Context
+  ) => {
+    try {
+      const { userId } = ctx.req;
 
-    if (userId) {
-      // logged in user followers new user
-      const followQuery =
-        args.actionType === 'follow'
-          ? { $push: { following: args.userId } }
-          : { $pull: { following: args.userId } };
+      if (userId) {
+        // logged in user followers new user
+        const followQuery =
+          args.actionType === 'follow'
+            ? { $push: { following: args.userId } }
+            : { $pull: { following: args.userId } };
 
-      // add a new follower to the user the current user decided to follow
-      const followerQuery =
-        args.actionType === 'follow'
-          ? { $push: { followers: userId } }
-          : { $pull: { followers: userId } };
+        // add a new follower to the user the current user decided to follow
+        const followerQuery =
+          args.actionType === 'follow'
+            ? { $push: { followers: userId } }
+            : { $pull: { followers: userId } };
 
-      await User.findOneAndUpdate({ _id: args.userId }, followerQuery);
+        await User.findOneAndUpdate({ _id: args.userId }, followerQuery);
 
-      const user = await User.findOneAndUpdate({ _id: userId }, followQuery, {
-        new: true
-      });
+        const user = await User.findOneAndUpdate({ _id: userId }, followQuery, {
+          new: true
+        });
 
-      return user?._id;
-    } else {
-      throw new Error('Missing userId');
+        return user?._id;
+      } else {
+        throw new Error('Missing userId');
+      }
+    } catch (err) {
+      throw err;
     }
-  } catch (err) {
-    throw err;
   }
-};
+);
