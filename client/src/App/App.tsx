@@ -9,6 +9,7 @@ import { Loading } from 'Loading';
 import { NewTweet, TweetDetails } from 'Tweet';
 import { Profile } from 'Profile';
 import { AppContext } from 'Context';
+import NotFound from '404';
 
 const App = () => {
   const { loading } = useContext(AppContext);
@@ -31,7 +32,7 @@ const App = () => {
             <ProtectedRoute exact path='/tweet/new' component={NewTweet} />
             <ProtectedRoute path='/tweet/:tweetId' component={TweetDetails} />
             <ProtectedRoute exact path='/' component={Home} />
-            <Route render={() => <div>404</div>} />
+            <Route render={() => <NotFound />} />
           </Switch>
         </Container>
       )}

@@ -21,6 +21,20 @@ const cache: InMemoryCache = new InMemoryCache({
           }
         }
       }
+    },
+    Tweet: {
+      fields: {
+        likes: {
+          merge(_, incoming) {
+            return incoming;
+          }
+        },
+        comments: {
+          merge(_, incoming) {
+            return incoming;
+          }
+        }
+      }
     }
   }
 });

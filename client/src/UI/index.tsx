@@ -31,6 +31,7 @@ interface IColumnProps {
   justify?: string;
   align?: responsive | string;
   pt?: stringOrNumber;
+  mt?: stringOrNumber;
 }
 
 export const Segment: React.FC<ISegmentProps> = ({ children, ...rest }) => (

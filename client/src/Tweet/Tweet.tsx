@@ -52,11 +52,11 @@ const Tweet: React.FC<IProps> = ({
           {tweet.message}
         </Box>
         <Divider orientation='horizontal' mt={2} mb={2} />
-        <Row justify='space-between'>
-          <LikeButton user={user} likes={tweet.likes} tweetId={tweet._id} />
-          <CommentButton comments={tweet.comments ?? []} tweetId={tweet._id} />
-        </Row>
       </Link>
+      <Row justify='space-between'>
+        <LikeButton user={user} likes={tweet.likes} tweetId={tweet._id} />
+        <CommentButton comments={tweet.comments ?? []} tweetId={tweet._id} />
+      </Row>
     </Segment>
   );
 };
