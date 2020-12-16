@@ -7,15 +7,20 @@ export const tweets = authenticated(
   async (_: any, args: { offset: number }) => {
     try {
       const { offset } = args;
-      // const totalDocs = await Tweet.count({});
+      const totalDocs = await Tweet.count({});
+      const hasMore = offset * LIMIT < totalDocs;
 
-      // update this to return a hasMore tweets property to conditionally disable the load more tweets
-      return await Tweet.find({})
+      const tweets = await Tweet.find({})
         .limit(LIMIT)
-        .skip((offset ?? 0) * LIMIT)
+        .skip((offset - 1) * LIMIT)
         .sort({ dateCreated: -1 })
         .populate({ path: 'user', model: 'User' })
         .populate({ path: 'likes', model: 'Like' });
+
+      return {
+        tweets,
+        hasMore
+      };
     } catch (err) {
       throw err;
     }

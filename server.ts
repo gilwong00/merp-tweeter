@@ -8,7 +8,7 @@ import cors from 'cors';
 import colors from 'colors';
 import schema from './server/graphql/schema';
 
-const PORT = process.env.port || 5000;
+const PORT = process.env.PORT || 5000;
 
 const startServer = async () => {
   const app = express();

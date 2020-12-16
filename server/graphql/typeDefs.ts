@@ -45,8 +45,13 @@ const typeDefs = gql`
     user: User!
   }
 
+  type PaginatedTweets {
+    tweets: [Tweet]
+    hasMore: Boolean
+  }
+
   type Query {
-    tweets(offset: Int): [Tweet]
+    tweets(offset: Int): PaginatedTweets
     getLoggedInUser: User
     search(searchTerm: String!): [SearchResult]
     getTweet(tweetId: ID!): Tweet!

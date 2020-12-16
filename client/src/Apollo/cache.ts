@@ -1,4 +1,5 @@
 import { InMemoryCache } from '@apollo/client';
+import { IPaginatedTweets } from 'Tweet';
 
 const cache: InMemoryCache = new InMemoryCache({
   typePolicies: {
@@ -7,8 +8,14 @@ const cache: InMemoryCache = new InMemoryCache({
         tweets: {
           keyArgs: [],
           // taking our incoming tweets and merging with our existing tweets for pagination
-          merge(existing, incoming) {
-            return [...(existing ?? []), ...incoming];
+          merge(
+            existing: IPaginatedTweets | undefined,
+            incoming: IPaginatedTweets
+          ) {
+            return {
+              ...incoming,
+              tweets: [...(existing?.tweets ?? []), ...incoming.tweets]
+            };
           }
         }
       }

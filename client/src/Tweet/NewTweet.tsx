@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { AppContext } from 'Context';
 import { gql, useMutation } from '@apollo/client';
 import { CREATE_TWEET } from 'graphql/mutations/tweet';
-import { ITweet } from 'Tweet';
+import { IPaginatedTweets, ITweet } from 'Tweet';
 import { useToastNotification } from 'hooks';
 import {
   FormControl,
@@ -33,7 +33,9 @@ const NewTweet = () => {
       } else {
         cache.modify({
           fields: {
-            tweets(existingTweets: Array<ITweet> = []) {
+            tweets(
+              existing: IPaginatedTweets = { tweets: [], hasMore: false }
+            ) {
               const newTweetRef = cache.writeFragment({
                 data: { __typename: 'Tweet', ...data.createTweet },
                 fragment: gql`
@@ -56,7 +58,7 @@ const NewTweet = () => {
                   }
                 `
               });
-              return [newTweetRef, ...existingTweets];
+              return [newTweetRef, ...existing?.tweets];
             }
           }
         });
