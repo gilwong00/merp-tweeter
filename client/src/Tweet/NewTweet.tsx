@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import { AppContext } from 'Context';
 import { gql, useMutation } from '@apollo/client';
 import { CREATE_TWEET } from 'graphql/mutations/tweet';
-import { IPaginatedTweets, ITweet } from 'Tweet';
 import { useToastNotification } from 'hooks';
 import {
   FormControl,
@@ -15,6 +14,7 @@ import {
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import * as joi from 'joi';
+
 interface ITweetInput {
   message: string;
 }
@@ -33,9 +33,7 @@ const NewTweet = () => {
       } else {
         cache.modify({
           fields: {
-            tweets(
-              existing: IPaginatedTweets = { tweets: [], hasMore: false }
-            ) {
+            tweets(existing) {
               const newTweetRef = cache.writeFragment({
                 data: { __typename: 'Tweet', ...data.createTweet },
                 fragment: gql`
@@ -58,7 +56,7 @@ const NewTweet = () => {
                   }
                 `
               });
-              return [newTweetRef, ...existing?.tweets];
+              return [newTweetRef, ...existing];
             }
           }
         });

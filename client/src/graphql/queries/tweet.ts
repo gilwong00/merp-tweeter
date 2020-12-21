@@ -1,25 +1,22 @@
 import { gql } from '@apollo/client';
 
 export const GET_ALL_TWEETS = gql`
-  query getTweets($offset: Int) {
-    tweets(offset: $offset) {
-      tweets {
+  query getTweets($cursor: String) {
+    tweets(cursor: $cursor) {
+      _id
+      message
+      dateCreated
+      comments {
         _id
-        message
-        dateCreated
-        comments {
-          _id
-        }
-        likes {
-          _id
-          username
-        }
-        user {
-          _id
-          username
-        }
       }
-      hasMore
+      likes {
+        _id
+        username
+      }
+      user {
+        _id
+        username
+      }
     }
   }
 `;

@@ -4,23 +4,15 @@ import authenticated from '../../../middleware/isAuth';
 const LIMIT = 6;
 
 export const tweets = authenticated(
-  async (_: any, args: { offset: number }) => {
+  async (_: any, args: { cursor: string }) => {
     try {
-      const { offset } = args;
-      const totalDocs = await Tweet.count({});
-      const hasMore = offset * LIMIT < totalDocs;
-
-      const tweets = await Tweet.find({})
+      const { cursor } = args;
+      const query = cursor ? { dateCreated: { $lt: new Date(cursor) } } : {};
+      return await Tweet.find(query)
         .limit(LIMIT)
-        .skip((offset - 1) * LIMIT)
         .sort({ dateCreated: -1 })
         .populate({ path: 'user', model: 'User' })
         .populate({ path: 'likes', model: 'Like' });
-
-      return {
-        tweets,
-        hasMore
-      };
     } catch (err) {
       throw err;
     }

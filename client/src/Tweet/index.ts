@@ -27,8 +27,3 @@ export interface ITweet {
   comments: Array<IComment>;
   likes: Array<ILike>;
 }
-
-export interface IPaginatedTweets {
-  tweets: Array<ITweet>;
-  hasMore: boolean;
-}
